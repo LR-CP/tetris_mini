@@ -2,6 +2,10 @@
 #include "terminal.h"
 #include "input.h"
 
+//TODO: Add collisions of pieces together
+//TODO: Fix the right wall boundary with piece width
+//TODO: 
+
 /**
  * The main function initializes the Tetris game, clears the screen, and sets up the initial state.
  * It then enters an infinite loop to handle user input and render the game visuals.
@@ -43,7 +47,7 @@ int main(int argc, char *argv[])
     hide_cursor();
     // drawShapesTest();
 
-    Tetromino_t active_piece = {.type = S_SHAPE, .coords = (coords_t){.x = SHAPE_SPAWN_X, .y = SHAPE_SPAWN_Y}, .height = 1};
+    Tetromino_t active_piece = {.type = L_SHAPE, .coords = (coords_t){.x = SHAPE_SPAWN_X, .y = SHAPE_SPAWN_Y}, .height = 2, .width = 2};
     char input = 0;
     int frameCount = 0;
     while (1) // Main game loop, press 'q' to quit
@@ -58,25 +62,25 @@ int main(int argc, char *argv[])
                     // quit game
                     break;
                 }
-                else if (input == 'a' && active_piece.coords.x > BOARD_LEFT_WALL)
+                else if (input == 'a' && (active_piece.coords.x - active_piece.width) > BOARD_LEFT_WALL)
                 {
                     // need to redraw old position of piece with blank spaces to "erase" it
                     clear_old_position(active_piece, HORIZONTAL);
                     // move piece left
                     active_piece.coords.x -= 2;
                 }
-                else if (input == 'd' && active_piece.coords.x <= BOARD_RIGHT_WALL)
+                else if (input == 'd' && (active_piece.coords.x) <= (BOARD_RIGHT_WALL + active_piece.width))
                 {
                     // move piece right
                     clear_old_position(active_piece, HORIZONTAL);
                     active_piece.coords.x += 2;
                 }
-                // else if (input == 's' && active_piece.coords.y+(active_piece.height+1) < BOARD_BOTTOM_WALL)
-                // {
-                //     // move piece down faster
-                //     clear_old_position(active_piece, HORIZONTAL);
-                //     active_piece.coords.y += 2;
-                // }
+                else if (input == 's' && active_piece.coords.y + (active_piece.height + 1) < BOARD_BOTTOM_WALL)
+                {
+                    // move piece down faster
+                    clear_old_position(active_piece, HORIZONTAL);
+                    active_piece.coords.y += 1;
+                }
                 else if (input == 'w')
                 {
                     // rotate piece
@@ -104,17 +108,33 @@ int main(int argc, char *argv[])
             drawJ(active_piece.coords);
         else if (active_piece.type == T_SHAPE)
             drawT(active_piece.coords);
-        
-        if (active_piece.coords.y >= (BOARD_BOTTOM_WALL-active_piece.height)) // Piece has reached the bottom, generate new piece
+
+        printf("%d, %d\n", active_piece.coords.x, BOARD_RIGHT_WALL);
+
+        if (active_piece.coords.y >= (BOARD_BOTTOM_WALL - active_piece.height)) // Piece has reached the bottom, generate new piece
         {
             active_piece.coords = (coords_t){.x = SHAPE_SPAWN_X, .y = SHAPE_SPAWN_Y};
             active_piece.type = rand() % 7;
             if (active_piece.type == I_SHAPE)
+            {
                 active_piece.height = 3;
-            else if (active_piece.type == O_SHAPE || active_piece.type == S_SHAPE || active_piece.type == Z_SHAPE)
+                active_piece.width = 1;
+            }
+            else if (active_piece.type == O_SHAPE || active_piece.type == S_SHAPE || active_piece.type == Z_SHAPE || active_piece.type == T_SHAPE)
+            {
                 active_piece.height = 1;
-            else
+                active_piece.width = 1;
+            }
+            else if (active_piece.type == J_SHAPE)
+            {
                 active_piece.height = 2;
+                active_piece.width = 2;
+            }
+            else if (active_piece.type == L_SHAPE)
+            {
+                active_piece.height = 2;
+                active_piece.width = 2;
+            }
         }
         else if (get_current_time_ms() - start_time >= fall_time)
         {

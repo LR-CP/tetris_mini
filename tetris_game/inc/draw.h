@@ -42,6 +42,7 @@ typedef struct
     Shape_t type;
     coords_t coords;
     int height;
+    int width;
 } Tetromino_t;
 
 typedef enum Move
