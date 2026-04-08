@@ -11,7 +11,7 @@ int main(int argc, char *argv[])
     int curr_curser_line = 5;
     int curr_cursor_column = 25;
     long long start_time = get_current_time_ms();
-    long long fall_time = 1000;
+    long long fall_time = 100;
     struct termios orig_t = set_raw_mode();
 
     clear_screen();
@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
     hide_cursor();
     // drawShapesTest();
 
-    Tetromino_t active_piece = {.type = T_SHAPE, .coords = (coords_t){.x = SHAPE_SPAWN_X, .y = SHAPE_SPAWN_Y}};
+    Tetromino_t active_piece = {.type = S_SHAPE, .coords = (coords_t){.x = SHAPE_SPAWN_X, .y = SHAPE_SPAWN_Y}, .height = 1};
     char input = 0;
     int frameCount = 0;
     while (1) // Main game loop, press 'q' to quit
@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
         {
             if (read(STDIN_FILENO, &input, 1) > 0)
             {
-                // listen for inputs (from keyboard or gamepad)
+                // listen for inputs (from keyboard or gamepad)pe
                 if (input == 'q')
                 {
                     // quit game
@@ -65,18 +65,18 @@ int main(int argc, char *argv[])
                     // move piece left
                     active_piece.coords.x -= 2;
                 }
-                else if (input == 'd' && active_piece.coords.x < BOARD_RIGHT_WALL)
+                else if (input == 'd' && active_piece.coords.x <= BOARD_RIGHT_WALL)
                 {
                     // move piece right
                     clear_old_position(active_piece, HORIZONTAL);
                     active_piece.coords.x += 2;
                 }
-                else if (input == 's' && active_piece.coords.y < BOARD_BOTTOM_WALL)
-                {
-                    // move piece down faster
-                    clear_old_position(active_piece, HORIZONTAL);
-                    active_piece.coords.y += 2;
-                }
+                // else if (input == 's' && active_piece.coords.y+(active_piece.height+1) < BOARD_BOTTOM_WALL)
+                // {
+                //     // move piece down faster
+                //     clear_old_position(active_piece, HORIZONTAL);
+                //     active_piece.coords.y += 2;
+                // }
                 else if (input == 'w')
                 {
                     // rotate piece
@@ -88,40 +88,43 @@ int main(int argc, char *argv[])
             input = 0; // No input
         }
 
-        // elect shape to start with (randomizer will be implemented later)
-        drawT(active_piece.coords);
-        // if (active_piece.type == O_SHAPE)
-        //     drawO(active_piece.coords);
-        // else if (active_piece.type == I_SHAPE)
-        //     drawI(active_piece.coords);
-        // else if (active_piece.type == S_SHAPE)
-        //     drawS(active_piece.coords);
-        // else if (active_piece.type == Z_SHAPE)
-        //     drawZ(active_piece.coords);
-        // else if (active_piece.type == L_SHAPE)
-        //     drawL(active_piece.coords);
-        // else if (active_piece.type == J_SHAPE)
-        //     drawJ(active_piece.coords);
-        // else if (active_piece.type == T_SHAPE)
-        //     drawT(active_piece.coords);
-
-        if (get_current_time_ms() - start_time >= fall_time \
-            && active_piece.coords.y < BOARD_BOTTOM_WALL \
-            && active_piece.coords.x > BOARD_LEFT_WALL \
-            && active_piece.coords.x < BOARD_RIGHT_WALL)
+        // Select shape to start with (randomizer will be implemented later)
+        // drawT(active_piece.coords);
+        if (active_piece.type == O_SHAPE)
+            drawO(active_piece.coords);
+        else if (active_piece.type == I_SHAPE)
+            drawI(active_piece.coords);
+        else if (active_piece.type == S_SHAPE)
+            drawS(active_piece.coords);
+        else if (active_piece.type == Z_SHAPE)
+            drawZ(active_piece.coords);
+        else if (active_piece.type == L_SHAPE)
+            drawL(active_piece.coords);
+        else if (active_piece.type == J_SHAPE)
+            drawJ(active_piece.coords);
+        else if (active_piece.type == T_SHAPE)
+            drawT(active_piece.coords);
+        
+        if (active_piece.coords.y >= (BOARD_BOTTOM_WALL-active_piece.height)) // Piece has reached the bottom, generate new piece
+        {
+            active_piece.coords = (coords_t){.x = SHAPE_SPAWN_X, .y = SHAPE_SPAWN_Y};
+            active_piece.type = rand() % 7;
+            if (active_piece.type == I_SHAPE)
+                active_piece.height = 3;
+            else if (active_piece.type == O_SHAPE || active_piece.type == S_SHAPE || active_piece.type == Z_SHAPE)
+                active_piece.height = 1;
+            else
+                active_piece.height = 2;
+        }
+        else if (get_current_time_ms() - start_time >= fall_time)
         {
             start_time = get_current_time_ms();
             active_piece.coords.y++; // Move piece down by incrementing the y coordinate
+            // printf("%d, %d\n", active_piece.coords.y, BOARD_BOTTOM_WALL);
+
             // Move piece down every iteration of the loop
             // need to redraw old position of piece with blank spaces to "erase" it
             clear_old_position(active_piece, VERTICAL);
-        }
-
-        if (active_piece.coords.y == BOARD_BOTTOM_WALL-1)
-        {
-            // Piece has reached the bottom, generate new piece
-            active_piece.coords = (coords_t){.x = SHAPE_SPAWN_X, .y = SHAPE_SPAWN_Y};
-            active_piece.type = rand() % 7;
         }
 
         if (frameCount >= 100)

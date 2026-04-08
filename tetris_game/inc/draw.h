@@ -6,7 +6,7 @@
 #define BOARD_HEIGHT 21
 
 #define BOARD_LEFT_WALL 52
-#define BOARD_RIGHT_WALL 67
+#define BOARD_RIGHT_WALL 65
 #define BOARD_TOP_WALL 5
 #define BOARD_BOTTOM_WALL 25
 
@@ -41,6 +41,7 @@ typedef struct
 {
     Shape_t type;
     coords_t coords;
+    int height;
 } Tetromino_t;
 
 typedef enum Move
@@ -64,7 +65,7 @@ void drawO(coords_t origin);
 void drawI(coords_t origin);
 
 /**
- *  
+ * 
  */
 void drawS(coords_t origin);
 

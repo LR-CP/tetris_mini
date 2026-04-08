@@ -159,8 +159,6 @@ void clear_old_position(Tetromino_t piece, Move_t move)
             piece.coords.x % 2 == 0 ? printf(" .") : printf("  ");
             set_cursor(piece.coords.y - 1, piece.coords.x + 4);
             piece.coords.x % 2 == 0 ? printf(" .") : printf("  ");
-            set_cursor(piece.coords.y, piece.coords.x - 2);
-            piece.coords.x % 2 == 0 ? printf(" .") : printf("  ");
             set_cursor(piece.coords.y, piece.coords.x);
             piece.coords.x % 2 == 0 ? printf(" .") : printf("  ");
         }
