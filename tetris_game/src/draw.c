@@ -157,7 +157,11 @@ void clear_old_position(Tetromino_t piece, Move_t move)
         {
             set_cursor(piece.coords.y - 1, piece.coords.x + 2);
             piece.coords.x % 2 == 0 ? printf(" .") : printf("  ");
-            set_cursor(piece.coords.y - 1, piece.coords.x + 2);
+            set_cursor(piece.coords.y - 1, piece.coords.x + 4);
+            piece.coords.x % 2 == 0 ? printf(" .") : printf("  ");
+            set_cursor(piece.coords.y, piece.coords.x - 2);
+            piece.coords.x % 2 == 0 ? printf(" .") : printf("  ");
+            set_cursor(piece.coords.y, piece.coords.x);
             piece.coords.x % 2 == 0 ? printf(" .") : printf("  ");
         }
 
@@ -181,6 +185,8 @@ void clear_old_position(Tetromino_t piece, Move_t move)
         // Clear top
         if (move == VERTICAL)
         {
+            set_cursor(piece.coords.y, piece.coords.x + 4);
+            piece.coords.x % 2 == 0 ? printf(" .") : printf("  ");
             set_cursor(piece.coords.y - 1, piece.coords.x);
             piece.coords.x % 2 == 0 ? printf(" .") : printf("  ");
             set_cursor(piece.coords.y - 1, piece.coords.x + 2);
@@ -207,6 +213,10 @@ void clear_old_position(Tetromino_t piece, Move_t move)
         // Clear top
         if (move == VERTICAL)
         {
+            set_cursor(piece.coords.y, piece.coords.x + 2);
+            piece.coords.x % 2 == 0 ? printf(" .") : printf("  ");
+            set_cursor(piece.coords.y + 1, piece.coords.x + 2);
+            piece.coords.x % 2 == 0 ? printf(" .") : printf("  ");
             set_cursor(piece.coords.y - 1, piece.coords.x);
             piece.coords.x % 2 == 0 ? printf(" .") : printf("  ");
             set_cursor(piece.coords.y - 1, piece.coords.x + 2);
@@ -233,6 +243,10 @@ void clear_old_position(Tetromino_t piece, Move_t move)
         // Clear top
         if (move == VERTICAL)
         {
+            set_cursor(piece.coords.y, piece.coords.x - 2);
+            piece.coords.x % 2 == 0 ? printf(" .") : printf("  ");
+            set_cursor(piece.coords.y+1, piece.coords.x-2);
+            piece.coords.x % 2 == 0 ? printf(" .") : printf("  ");
             set_cursor(piece.coords.y - 1, piece.coords.x);
             piece.coords.x % 2 == 0 ? printf(" .") : printf("  ");
             set_cursor(piece.coords.y - 1, piece.coords.x + 2);
@@ -258,6 +272,8 @@ void clear_old_position(Tetromino_t piece, Move_t move)
         // Clear top
         if (move == VERTICAL)
         {
+            set_cursor(piece.coords.y - 1, piece.coords.x+4);
+            piece.coords.x % 2 == 0 ? printf(" .") : printf("  ");
             set_cursor(piece.coords.y - 1, piece.coords.x);
             piece.coords.x % 2 == 0 ? printf(" .") : printf("  ");
             set_cursor(piece.coords.y - 1, piece.coords.x + 2);

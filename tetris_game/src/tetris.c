@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
     hide_cursor();
     // drawShapesTest();
 
-    Tetromino_t active_piece = {.type = O_SHAPE, .coords = (coords_t){.x = SHAPE_SPAWN_X, .y = SHAPE_SPAWN_Y}};
+    Tetromino_t active_piece = {.type = T_SHAPE, .coords = (coords_t){.x = SHAPE_SPAWN_X, .y = SHAPE_SPAWN_Y}};
     char input = 0;
     int frameCount = 0;
     while (1) // Main game loop, press 'q' to quit
@@ -89,7 +89,7 @@ int main(int argc, char *argv[])
         }
 
         // elect shape to start with (randomizer will be implemented later)
-        drawS(active_piece.coords);
+        drawT(active_piece.coords);
         // if (active_piece.type == O_SHAPE)
         //     drawO(active_piece.coords);
         // else if (active_piece.type == I_SHAPE)
