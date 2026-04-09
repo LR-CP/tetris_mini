@@ -9,6 +9,9 @@ I will program tetris from scratch in C and will create a user input interface I
 Going to copy the original tetris design by Alexey Pajitnov
 ![tetris](https://media.cnn.com/api/v1/images/stellar/prod/191028124455-tetris-e60.jpg?q=w_1160,c_fill/f_webp)
 
+My version will looks something like this:  
+![gameplay](./gameplay.gif)
+
 ## Hardware
 
 - Raspberry Pi Pico 2

@@ -2,9 +2,8 @@
 #include "terminal.h"
 #include "input.h"
 
-//TODO: Add collisions of pieces together
-//TODO: Fix the right wall boundary with piece width
-//TODO: 
+// TODO: Add collisions of pieces together (might need some sort of game/board state manager)
+// TODO: Implement score tracking, timer, lines completed, and other game logic
 
 /**
  * The main function initializes the Tetris game, clears the screen, and sets up the initial state.
@@ -17,6 +16,8 @@ int main(int argc, char *argv[])
     long long start_time = get_current_time_ms();
     long long fall_time = 100;
     struct termios orig_t = set_raw_mode();
+
+    GameState_t gameState = {0}; // Clear out struct to all 0's (for array mainly)
 
     clear_screen();
     cursor_home();
@@ -34,7 +35,7 @@ int main(int argc, char *argv[])
     curr_curser_line = 5;
     curr_cursor_column = 50;
     set_cursor(curr_curser_line, curr_cursor_column);
-    for (int i = 0; i < BOARD_HEIGHT; i++)
+    for (int i = 1; i <= BOARD_HEIGHT; i++)
     {
         printf("<! . . . . . . . . . .!>\n");
         set_cursor(curr_curser_line += 1, curr_cursor_column);
@@ -47,11 +48,72 @@ int main(int argc, char *argv[])
     hide_cursor();
     // drawShapesTest();
 
-    Tetromino_t active_piece = {.type = L_SHAPE, .coords = (coords_t){.x = SHAPE_SPAWN_X, .y = SHAPE_SPAWN_Y}, .height = 2, .width = 2};
+    // Make array of pieces to randomly choose from for spawn.
+    // Width needed to be adjusted by factor of 2 since piece is 2 chars long, thats why borders weren't working before
+    Tetromino_t pieces[] = {{.type = O_SHAPE, .coords = (coords_t){.x = SHAPE_SPAWN_X, .y = SHAPE_SPAWN_Y}, .height = 2, .width = 3},
+                            {.type = I_SHAPE, .coords = (coords_t){.x = SHAPE_SPAWN_X, .y = SHAPE_SPAWN_Y}, .height = 4, .width = 1},
+                            {.type = S_SHAPE, .coords = (coords_t){.x = SHAPE_SPAWN_X, .y = SHAPE_SPAWN_Y}, .height = 2, .width = 6},
+                            {.type = Z_SHAPE, .coords = (coords_t){.x = SHAPE_SPAWN_X, .y = SHAPE_SPAWN_Y}, .height = 2, .width = 6},
+                            {.type = L_SHAPE, .coords = (coords_t){.x = SHAPE_SPAWN_X, .y = SHAPE_SPAWN_Y}, .height = 3, .width = 4},
+                            {.type = J_SHAPE, .coords = (coords_t){.x = SHAPE_SPAWN_X, .y = SHAPE_SPAWN_Y}, .height = 3, .width = 4},
+                            {.type = T_SHAPE, .coords = (coords_t){.x = SHAPE_SPAWN_X, .y = SHAPE_SPAWN_Y}, .height = 2, .width = 6}};
+    Tetromino_t active_piece = pieces[rand() % 7]; // Choose random piece to start.
+
     char input = 0;
     int frameCount = 0;
     while (1) // Main game loop, press 'q' to quit
     {
+        // Render active piece
+        switch (active_piece.type)
+        {
+        case O_SHAPE:
+            drawO(active_piece.coords);
+            break;
+        case I_SHAPE:
+            drawI(active_piece.coords);
+            break;
+        case S_SHAPE:
+            drawS(active_piece.coords);
+            break;
+        case Z_SHAPE:
+            drawZ(active_piece.coords);
+            break;
+        case L_SHAPE:
+            drawL(active_piece.coords);
+            break;
+        case J_SHAPE:
+            drawJ(active_piece.coords);
+            break;
+        case T_SHAPE:
+            drawT(active_piece.coords);
+            break;
+        default:
+            break;
+        }
+
+        // set_cursor(1,1);
+        // printf("l = %d, c = %d\n", active_piece.coords.y, active_piece.coords.x);
+        // set_cursor(2,1);
+        // printf("BOARD_LEFT_WALL = %d, BOARD_RIGHT_WALL = %d\n", BOARD_LEFT_WALL, BOARD_RIGHT_WALL);
+
+        // Check collisions
+        if (active_piece.coords.y + active_piece.height > BOARD_BOTTOM_WALL)
+        {
+            // Update GameState
+            gameState.board[active_piece.coords.y][active_piece.coords.x] = 1;
+            active_piece = pieces[rand() % 7]; // Spawn new piece
+        }
+        else if (active_piece.coords.y + 1 == '[' || active_piece.coords.y + 1 == ']')
+        {
+            printf("coollision\n");
+        }
+        // else if (active_piece.coords.x - active_piece.width >= BOARD_RIGHT_WALL)
+        // {
+        //     // active_piece = pieces[rand() % 7]; // Spawn new piece
+        //     active_piece.coords.x-=2;
+        // }
+
+        // Listen for keypress
         if (keyboard_input())
         {
             if (read(STDIN_FILENO, &input, 1) > 0)
@@ -62,14 +124,14 @@ int main(int argc, char *argv[])
                     // quit game
                     break;
                 }
-                else if (input == 'a' && (active_piece.coords.x - active_piece.width) > BOARD_LEFT_WALL)
+                else if (input == 'a' && active_piece.coords.x > BOARD_LEFT_WALL) // Since all shapes builf from origin, no width needed to be added here
                 {
                     // need to redraw old position of piece with blank spaces to "erase" it
                     clear_old_position(active_piece, HORIZONTAL);
                     // move piece left
                     active_piece.coords.x -= 2;
                 }
-                else if (input == 'd' && (active_piece.coords.x) <= (BOARD_RIGHT_WALL + active_piece.width))
+                else if (input == 'd' && (active_piece.coords.x) <= (BOARD_RIGHT_WALL - active_piece.width))
                 {
                     // move piece right
                     clear_old_position(active_piece, HORIZONTAL);
@@ -92,55 +154,11 @@ int main(int argc, char *argv[])
             input = 0; // No input
         }
 
-        // Select shape to start with (randomizer will be implemented later)
-        // drawT(active_piece.coords);
-        if (active_piece.type == O_SHAPE)
-            drawO(active_piece.coords);
-        else if (active_piece.type == I_SHAPE)
-            drawI(active_piece.coords);
-        else if (active_piece.type == S_SHAPE)
-            drawS(active_piece.coords);
-        else if (active_piece.type == Z_SHAPE)
-            drawZ(active_piece.coords);
-        else if (active_piece.type == L_SHAPE)
-            drawL(active_piece.coords);
-        else if (active_piece.type == J_SHAPE)
-            drawJ(active_piece.coords);
-        else if (active_piece.type == T_SHAPE)
-            drawT(active_piece.coords);
-
-        printf("%d, %d\n", active_piece.coords.x, BOARD_RIGHT_WALL);
-
-        if (active_piece.coords.y >= (BOARD_BOTTOM_WALL - active_piece.height)) // Piece has reached the bottom, generate new piece
-        {
-            active_piece.coords = (coords_t){.x = SHAPE_SPAWN_X, .y = SHAPE_SPAWN_Y};
-            active_piece.type = rand() % 7;
-            if (active_piece.type == I_SHAPE)
-            {
-                active_piece.height = 3;
-                active_piece.width = 1;
-            }
-            else if (active_piece.type == O_SHAPE || active_piece.type == S_SHAPE || active_piece.type == Z_SHAPE || active_piece.type == T_SHAPE)
-            {
-                active_piece.height = 1;
-                active_piece.width = 1;
-            }
-            else if (active_piece.type == J_SHAPE)
-            {
-                active_piece.height = 2;
-                active_piece.width = 2;
-            }
-            else if (active_piece.type == L_SHAPE)
-            {
-                active_piece.height = 2;
-                active_piece.width = 2;
-            }
-        }
-        else if (get_current_time_ms() - start_time >= fall_time)
+        // Move the piece down 1 block per second (gravity)
+        if (get_current_time_ms() - start_time >= fall_time)
         {
             start_time = get_current_time_ms();
             active_piece.coords.y++; // Move piece down by incrementing the y coordinate
-            // printf("%d, %d\n", active_piece.coords.y, BOARD_BOTTOM_WALL);
 
             // Move piece down every iteration of the loop
             // need to redraw old position of piece with blank spaces to "erase" it
@@ -151,8 +169,22 @@ int main(int argc, char *argv[])
         {
             frameCount = 0;
         }
+
         usleep(10000); // Sleep for 10ms to control frame rate (100 FPS)
         frameCount++;
+
+        // Print gamestate
+        set_cursor(5, 80);
+        for (int i = 0; i < BOARD_WIDTH; i++)
+        {
+            for (int j = 0; j < BOARD_HEIGHT; j++)
+            {
+                set_cursor(5+j, 80+i);
+                printf("%d", gameState.board[j][i]);
+            }
+            printf("\n");
+        }
+        printf("\n");
     }
 
     show_cursor();
