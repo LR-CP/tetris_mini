@@ -1,12 +1,17 @@
-all:
-	mkdir -p debug
-	make build
+CC = gcc
+CFLAGS = -Wall -Wextra -std=c11 -O2 -Iinc
+TARGET = debug/tetris
 
-build:
-	gcc src/tetris.c src/draw.c src/input.c src/terminal.c -Iinc/ -o debug/tetris
+SRC = src/tetris.c src/draw.c src/input.c src/terminal.c
+
+all: $(TARGET)
+
+$(TARGET):
+	mkdir -p debug
+	$(CC) $(CFLAGS) $(SRC) -o $(TARGET)
 
 clean:
-	rm -f tetris
+	rm -rf debug
 
-run:
-	./debug/tetris
+run: $(TARGET)
+	./$(TARGET)

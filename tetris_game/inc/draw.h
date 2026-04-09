@@ -22,8 +22,8 @@
  */
 typedef struct
 {
-    int x; // X position of the piece on the board
-    int y; // Y position of the piece on the board
+    int c; // X position of the piece on the board
+    int l; // Y position of the piece on the board
 } coords_t;
 
 typedef enum Shape
@@ -50,6 +50,14 @@ typedef enum Move
     VERTICAL,
     HORIZONTAL
 } Move_t;
+
+/**
+ * Draw the board and the main UI
+ * 
+ * @param start_row The row to start drawing on
+ * @param start_column The column to start drawing on
+ */
+void drawBoard(int start_row, int start_column);
 
 /**
  * Draws the O-shaped tetromino at the specified origin coordinates.

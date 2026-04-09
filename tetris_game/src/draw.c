@@ -7,15 +7,40 @@
  * Starts from the top left empty square and it built out with indexing
  */
 
+void drawBoard(int curr_curser_line, int curr_cursor_column)
+{
+    set_cursor(curr_curser_line, curr_cursor_column);
+    printf("FULL LINES: 0\n");
+    set_cursor(curr_curser_line += 1, curr_cursor_column);
+    printf("LEVEL: 0\n");
+    set_cursor(curr_curser_line += 1, curr_cursor_column);
+    printf("SCORE: 0\n");
+    set_cursor(curr_curser_line += 1, curr_cursor_column);
+    printf("TIME: 0:00\n");
+
+    curr_curser_line = 5;
+    curr_cursor_column = 50;
+    set_cursor(curr_curser_line, curr_cursor_column);
+    for (int i = 1; i <= BOARD_HEIGHT; i++)
+    {
+        printf("<! . . . . . . . . . .!>\n");
+        set_cursor(curr_curser_line += 1, curr_cursor_column);
+    }
+    set_cursor(BOARD_HEIGHT + 5, curr_cursor_column);
+    printf("<!********************!>\n");
+    set_cursor(BOARD_HEIGHT + 6, curr_cursor_column);
+    printf("  \\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\n");
+}
+
 void drawO(coords_t origin)
 {
-    set_cursor(origin.y, origin.x);
+    set_cursor(origin.l, origin.c);
     printf(SHAPE);
-    set_cursor(origin.y, origin.x + 2);
+    set_cursor(origin.l, origin.c + 2);
     printf(SHAPE);
-    set_cursor(origin.y + 1, origin.x);
+    set_cursor(origin.l + 1, origin.c);
     printf(SHAPE);
-    set_cursor(origin.y + 1, origin.x + 2);
+    set_cursor(origin.l + 1, origin.c + 2);
     printf(SHAPE);
 
     printf("\n");
@@ -23,13 +48,13 @@ void drawO(coords_t origin)
 
 void drawI(coords_t origin)
 {
-    set_cursor(origin.y, origin.x);
+    set_cursor(origin.l, origin.c);
     printf(SHAPE);
-    set_cursor(origin.y + 1, origin.x);
+    set_cursor(origin.l + 1, origin.c);
     printf(SHAPE);
-    set_cursor(origin.y + 2, origin.x);
+    set_cursor(origin.l + 2, origin.c);
     printf(SHAPE);
-    set_cursor(origin.y + 3, origin.x);
+    set_cursor(origin.l + 3, origin.c);
     printf(SHAPE);
 
     printf("\n");
@@ -37,13 +62,13 @@ void drawI(coords_t origin)
 
 void drawS(coords_t origin)
 {
-    set_cursor(origin.y, origin.x + 2);
+    set_cursor(origin.l, origin.c + 2);
     printf(SHAPE);
-    set_cursor(origin.y, origin.x + 4);
+    set_cursor(origin.l, origin.c + 4);
     printf(SHAPE);
-    set_cursor(origin.y + 1, origin.x);
+    set_cursor(origin.l + 1, origin.c);
     printf(SHAPE);
-    set_cursor(origin.y + 1, origin.x + 2);
+    set_cursor(origin.l + 1, origin.c + 2);
     printf(SHAPE);
 
     printf("\n");
@@ -51,13 +76,13 @@ void drawS(coords_t origin)
 
 void drawZ(coords_t origin)
 {
-    set_cursor(origin.y, origin.x);
+    set_cursor(origin.l, origin.c);
     printf(SHAPE);
-    set_cursor(origin.y, origin.x + 2);
+    set_cursor(origin.l, origin.c + 2);
     printf(SHAPE);
-    set_cursor(origin.y + 1, origin.x + 2);
+    set_cursor(origin.l + 1, origin.c + 2);
     printf(SHAPE);
-    set_cursor(origin.y + 1, origin.x + 4);
+    set_cursor(origin.l + 1, origin.c + 4);
     printf(SHAPE);
 
     printf("\n");
@@ -65,13 +90,13 @@ void drawZ(coords_t origin)
 
 void drawL(coords_t origin)
 {
-    set_cursor(origin.y, origin.x);
+    set_cursor(origin.l, origin.c);
     printf(SHAPE);
-    set_cursor(origin.y + 1, origin.x);
+    set_cursor(origin.l + 1, origin.c);
     printf(SHAPE);
-    set_cursor(origin.y + 2, origin.x);
+    set_cursor(origin.l + 2, origin.c);
     printf(SHAPE);
-    set_cursor(origin.y + 2, origin.x + 2);
+    set_cursor(origin.l + 2, origin.c + 2);
     printf(SHAPE);
 
     printf("\n");
@@ -79,13 +104,13 @@ void drawL(coords_t origin)
 
 void drawJ(coords_t origin)
 {
-    set_cursor(origin.y, origin.x + 2);
+    set_cursor(origin.l, origin.c + 2);
     printf(SHAPE);
-    set_cursor(origin.y + 1, origin.x + 2);
+    set_cursor(origin.l + 1, origin.c + 2);
     printf(SHAPE);
-    set_cursor(origin.y + 2, origin.x + 2);
+    set_cursor(origin.l + 2, origin.c + 2);
     printf(SHAPE);
-    set_cursor(origin.y + 2, origin.x);
+    set_cursor(origin.l + 2, origin.c);
     printf(SHAPE);
 
     printf("\n");
@@ -93,13 +118,13 @@ void drawJ(coords_t origin)
 
 void drawT(coords_t origin)
 {
-    set_cursor(origin.y, origin.x);
+    set_cursor(origin.l, origin.c);
     printf(SHAPE);
-    set_cursor(origin.y, origin.x + 2);
+    set_cursor(origin.l, origin.c + 2);
     printf(SHAPE);
-    set_cursor(origin.y, origin.x + 4);
+    set_cursor(origin.l, origin.c + 4);
     printf(SHAPE);
-    set_cursor(origin.y + 1, origin.x + 2);
+    set_cursor(origin.l + 1, origin.c + 2);
     printf(SHAPE);
 
     printf("\n");
@@ -112,23 +137,23 @@ void clear_old_position(Tetromino_t piece, Move_t move)
         // Clear top
         if (move == VERTICAL)
         {
-            set_cursor(piece.coords.y - 1, piece.coords.x);
-            piece.coords.x % 2 == 0 ? printf(" .") : printf("  ");
-            set_cursor(piece.coords.y - 1, piece.coords.x + 2);
-            piece.coords.x % 2 == 0 ? printf(" .") : printf("  ");
+            set_cursor(piece.coords.l - 1, piece.coords.c);
+            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
+            set_cursor(piece.coords.l - 1, piece.coords.c + 2);
+            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
         }
 
         // Clear old shape position
         if (move == HORIZONTAL)
         {
-            set_cursor(piece.coords.y, piece.coords.x);
-            piece.coords.x % 2 == 0 ? printf(" .") : printf("  ");
-            set_cursor(piece.coords.y, piece.coords.x + 2);
-            piece.coords.x % 2 == 0 ? printf(" .") : printf("  ");
-            set_cursor(piece.coords.y + 1, piece.coords.x);
-            piece.coords.x % 2 == 0 ? printf(" .") : printf("  ");
-            set_cursor(piece.coords.y + 1, piece.coords.x + 2);
-            piece.coords.x % 2 == 0 ? printf(" .") : printf("  ");
+            set_cursor(piece.coords.l, piece.coords.c);
+            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
+            set_cursor(piece.coords.l, piece.coords.c + 2);
+            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
+            set_cursor(piece.coords.l + 1, piece.coords.c);
+            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
+            set_cursor(piece.coords.l + 1, piece.coords.c + 2);
+            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
         }
 
         printf("\n");
@@ -138,21 +163,21 @@ void clear_old_position(Tetromino_t piece, Move_t move)
         // Clear top
         if (move == VERTICAL)
         {
-            set_cursor(piece.coords.y - 1, piece.coords.x);
-            piece.coords.x % 2 == 0 ? printf(" .") : printf("  ");
+            set_cursor(piece.coords.l - 1, piece.coords.c);
+            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
         }
 
         // Clear old shape position
         if (move == HORIZONTAL)
         {
-            set_cursor(piece.coords.y, piece.coords.x);
-            piece.coords.x % 2 == 0 ? printf(" .") : printf("  ");
-            set_cursor(piece.coords.y + 1, piece.coords.x);
-            piece.coords.x % 2 == 0 ? printf(" .") : printf("  ");
-            set_cursor(piece.coords.y + 2, piece.coords.x);
-            piece.coords.x % 2 == 0 ? printf(" .") : printf("  ");
-            set_cursor(piece.coords.y + 3, piece.coords.x);
-            piece.coords.x % 2 == 0 ? printf(" .") : printf("  ");
+            set_cursor(piece.coords.l, piece.coords.c);
+            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
+            set_cursor(piece.coords.l + 1, piece.coords.c);
+            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
+            set_cursor(piece.coords.l + 2, piece.coords.c);
+            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
+            set_cursor(piece.coords.l + 3, piece.coords.c);
+            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
         }
 
         printf("\n");
@@ -162,25 +187,25 @@ void clear_old_position(Tetromino_t piece, Move_t move)
         // Clear top
         if (move == VERTICAL)
         {
-            set_cursor(piece.coords.y - 1, piece.coords.x + 2);
-            piece.coords.x % 2 == 0 ? printf(" .") : printf("  ");
-            set_cursor(piece.coords.y - 1, piece.coords.x + 4);
-            piece.coords.x % 2 == 0 ? printf(" .") : printf("  ");
-            set_cursor(piece.coords.y, piece.coords.x);
-            piece.coords.x % 2 == 0 ? printf(" .") : printf("  ");
+            set_cursor(piece.coords.l - 1, piece.coords.c + 2);
+            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
+            set_cursor(piece.coords.l - 1, piece.coords.c + 4);
+            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
+            set_cursor(piece.coords.l, piece.coords.c);
+            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
         }
 
         // Clear old shape position
         if (move == HORIZONTAL)
         {
-            set_cursor(piece.coords.y, piece.coords.x + 2);
-            piece.coords.x % 2 == 0 ? printf(" .") : printf("  ");
-            set_cursor(piece.coords.y, piece.coords.x + 4);
-            piece.coords.x % 2 == 0 ? printf(" .") : printf("  ");
-            set_cursor(piece.coords.y + 1, piece.coords.x);
-            piece.coords.x % 2 == 0 ? printf(" .") : printf("  ");
-            set_cursor(piece.coords.y + 1, piece.coords.x + 2);
-            piece.coords.x % 2 == 0 ? printf(" .") : printf("  ");
+            set_cursor(piece.coords.l, piece.coords.c + 2);
+            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
+            set_cursor(piece.coords.l, piece.coords.c + 4);
+            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
+            set_cursor(piece.coords.l + 1, piece.coords.c);
+            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
+            set_cursor(piece.coords.l + 1, piece.coords.c + 2);
+            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
         }
 
         printf("\n");
@@ -190,25 +215,25 @@ void clear_old_position(Tetromino_t piece, Move_t move)
         // Clear top
         if (move == VERTICAL)
         {
-            set_cursor(piece.coords.y, piece.coords.x + 4);
-            piece.coords.x % 2 == 0 ? printf(" .") : printf("  ");
-            set_cursor(piece.coords.y - 1, piece.coords.x);
-            piece.coords.x % 2 == 0 ? printf(" .") : printf("  ");
-            set_cursor(piece.coords.y - 1, piece.coords.x + 2);
-            piece.coords.x % 2 == 0 ? printf(" .") : printf("  ");
+            set_cursor(piece.coords.l, piece.coords.c + 4);
+            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
+            set_cursor(piece.coords.l - 1, piece.coords.c);
+            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
+            set_cursor(piece.coords.l - 1, piece.coords.c + 2);
+            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
         }
 
         // Clear old shape position
         if (move == HORIZONTAL)
         {
-            set_cursor(piece.coords.y, piece.coords.x);
-            piece.coords.x % 2 == 0 ? printf(" .") : printf("  ");
-            set_cursor(piece.coords.y, piece.coords.x + 2);
-            piece.coords.x % 2 == 0 ? printf(" .") : printf("  ");
-            set_cursor(piece.coords.y + 1, piece.coords.x + 2);
-            piece.coords.x % 2 == 0 ? printf(" .") : printf("  ");
-            set_cursor(piece.coords.y + 1, piece.coords.x + 4);
-            piece.coords.x % 2 == 0 ? printf(" .") : printf("  ");
+            set_cursor(piece.coords.l, piece.coords.c);
+            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
+            set_cursor(piece.coords.l, piece.coords.c + 2);
+            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
+            set_cursor(piece.coords.l + 1, piece.coords.c + 2);
+            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
+            set_cursor(piece.coords.l + 1, piece.coords.c + 4);
+            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
         }
 
         printf("\n");
@@ -218,27 +243,27 @@ void clear_old_position(Tetromino_t piece, Move_t move)
         // Clear top
         if (move == VERTICAL)
         {
-            set_cursor(piece.coords.y, piece.coords.x + 2);
-            piece.coords.x % 2 == 0 ? printf(" .") : printf("  ");
-            set_cursor(piece.coords.y + 1, piece.coords.x + 2);
-            piece.coords.x % 2 == 0 ? printf(" .") : printf("  ");
-            set_cursor(piece.coords.y - 1, piece.coords.x);
-            piece.coords.x % 2 == 0 ? printf(" .") : printf("  ");
-            set_cursor(piece.coords.y - 1, piece.coords.x + 2);
-            piece.coords.x % 2 == 0 ? printf(" .") : printf("  ");
+            set_cursor(piece.coords.l, piece.coords.c + 2);
+            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
+            set_cursor(piece.coords.l + 1, piece.coords.c + 2);
+            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
+            set_cursor(piece.coords.l - 1, piece.coords.c);
+            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
+            set_cursor(piece.coords.l - 1, piece.coords.c + 2);
+            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
         }
 
         // Clear old shape position
         if (move == HORIZONTAL)
         {
-            set_cursor(piece.coords.y, piece.coords.x);
-            piece.coords.x % 2 == 0 ? printf(" .") : printf("  ");
-            set_cursor(piece.coords.y + 1, piece.coords.x);
-            piece.coords.x % 2 == 0 ? printf(" .") : printf("  ");
-            set_cursor(piece.coords.y + 2, piece.coords.x);
-            piece.coords.x % 2 == 0 ? printf(" .") : printf("  ");
-            set_cursor(piece.coords.y + 2, piece.coords.x + 2);
-            piece.coords.x % 2 == 0 ? printf(" .") : printf("  ");
+            set_cursor(piece.coords.l, piece.coords.c);
+            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
+            set_cursor(piece.coords.l + 1, piece.coords.c);
+            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
+            set_cursor(piece.coords.l + 2, piece.coords.c);
+            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
+            set_cursor(piece.coords.l + 2, piece.coords.c + 2);
+            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
         }
 
         printf("\n");
@@ -248,27 +273,27 @@ void clear_old_position(Tetromino_t piece, Move_t move)
         // Clear top
         if (move == VERTICAL)
         {
-            set_cursor(piece.coords.y, piece.coords.x);
-            piece.coords.x % 2 == 0 ? printf(" .") : printf("  ");
-            set_cursor(piece.coords.y + 1, piece.coords.x);
-            piece.coords.x % 2 == 0 ? printf(" .") : printf("  ");
-            set_cursor(piece.coords.y - 1, piece.coords.x);
-            piece.coords.x % 2 == 0 ? printf(" .") : printf("  ");
-            set_cursor(piece.coords.y - 1, piece.coords.x + 2);
-            piece.coords.x % 2 == 0 ? printf(" .") : printf("  ");
+            set_cursor(piece.coords.l, piece.coords.c);
+            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
+            set_cursor(piece.coords.l + 1, piece.coords.c);
+            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
+            set_cursor(piece.coords.l - 1, piece.coords.c);
+            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
+            set_cursor(piece.coords.l - 1, piece.coords.c + 2);
+            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
         }
 
         // Clear old shape position
         if (move == HORIZONTAL)
         {
-            set_cursor(piece.coords.y, piece.coords.x + 2);
-            piece.coords.x % 2 == 0 ? printf(" .") : printf("  ");
-            set_cursor(piece.coords.y + 1, piece.coords.x + 2);
-            piece.coords.x % 2 == 0 ? printf(" .") : printf("  ");
-            set_cursor(piece.coords.y + 2, piece.coords.x + 2);
-            piece.coords.x % 2 == 0 ? printf(" .") : printf("  ");
-            set_cursor(piece.coords.y + 2, piece.coords.x);
-            piece.coords.x % 2 == 0 ? printf(" .") : printf("  ");
+            set_cursor(piece.coords.l, piece.coords.c + 2);
+            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
+            set_cursor(piece.coords.l + 1, piece.coords.c + 2);
+            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
+            set_cursor(piece.coords.l + 2, piece.coords.c + 2);
+            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
+            set_cursor(piece.coords.l + 2, piece.coords.c);
+            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
         }
         printf("\n");
     }
@@ -277,25 +302,25 @@ void clear_old_position(Tetromino_t piece, Move_t move)
         // Clear top
         if (move == VERTICAL)
         {
-            set_cursor(piece.coords.y - 1, piece.coords.x + 4);
-            piece.coords.x % 2 == 0 ? printf(" .") : printf("  ");
-            set_cursor(piece.coords.y - 1, piece.coords.x);
-            piece.coords.x % 2 == 0 ? printf(" .") : printf("  ");
-            set_cursor(piece.coords.y - 1, piece.coords.x + 2);
-            piece.coords.x % 2 == 0 ? printf(" .") : printf("  ");
+            set_cursor(piece.coords.l - 1, piece.coords.c + 4);
+            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
+            set_cursor(piece.coords.l - 1, piece.coords.c);
+            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
+            set_cursor(piece.coords.l - 1, piece.coords.c + 2);
+            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
         }
 
         // Clear old shape position
         if (move == HORIZONTAL)
         {
-            set_cursor(piece.coords.y, piece.coords.x);
-            piece.coords.x % 2 == 0 ? printf(" .") : printf("  ");
-            set_cursor(piece.coords.y, piece.coords.x + 2);
-            piece.coords.x % 2 == 0 ? printf(" .") : printf("  ");
-            set_cursor(piece.coords.y, piece.coords.x + 4);
-            piece.coords.x % 2 == 0 ? printf(" .") : printf("  ");
-            set_cursor(piece.coords.y + 1, piece.coords.x + 2);
-            piece.coords.x % 2 == 0 ? printf(" .") : printf("  ");
+            set_cursor(piece.coords.l, piece.coords.c);
+            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
+            set_cursor(piece.coords.l, piece.coords.c + 2);
+            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
+            set_cursor(piece.coords.l, piece.coords.c + 4);
+            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
+            set_cursor(piece.coords.l + 1, piece.coords.c + 2);
+            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
         }
 
         printf("\n");
@@ -304,25 +329,25 @@ void clear_old_position(Tetromino_t piece, Move_t move)
 
 void drawShapesTest()
 {
-    coords_t coords = {.x = 52, .y = 6};
+    coords_t coords = {.c = 52, .l = 6};
     drawO(coords);
 
-    coords = (coords_t){.x = 58, .y = 6};
+    coords = (coords_t){.c = 58, .l = 6};
     drawI(coords);
 
-    coords = (coords_t){.x = 64, .y = 6};
+    coords = (coords_t){.c = 64, .l = 6};
     drawS(coords);
 
-    coords = (coords_t){.x = 52, .y = 10};
+    coords = (coords_t){.c = 52, .l = 10};
     drawZ(coords);
 
-    coords = (coords_t){.x = 62, .y = 15};
+    coords = (coords_t){.c = 62, .l = 15};
     drawL(coords);
 
-    coords = (coords_t){.x = 64, .y = 20};
+    coords = (coords_t){.c = 64, .l = 20};
     drawJ(coords);
 
-    coords = (coords_t){.x = 52, .y = 14};
+    coords = (coords_t){.c = 52, .l = 14};
     drawT(coords);
 }
 

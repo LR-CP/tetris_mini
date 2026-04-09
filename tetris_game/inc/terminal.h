@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <termios.h>
-#include <unistd.h> // Add compiler flag to use freertos vTaskDelay when compiled on pico
+#include <unistd.h>
 
 #pragma once
 
@@ -9,7 +9,7 @@
 
 typedef struct
 {
-    int board[20][21]; // Array of current game state, when block is full, write 1 to it to indicate object already there.
+    int board[21][21]; // Array of current game state, when block is full, write 1 to it to indicate object already there.
     int lines_completed; // Tracker of lines completed
 } GameState_t;
 
