@@ -1,17 +1,18 @@
 #include <stdio.h>
 #include <sys/time.h>
 #include "terminal.h"
+#include "game.h"
 
-#define BOARD_WIDTH 24
-#define BOARD_HEIGHT 21
+#define FULL_BOARD_WIDTH 24
+#define FULL_BOARD_HEIGHT 21
 
-#define BOARD_LEFT_WALL 52
-#define BOARD_RIGHT_WALL 70
-#define BOARD_TOP_WALL 5
-#define BOARD_BOTTOM_WALL 25
+#define BOARD_LEFT_WALL_COORD 52
+#define BOARD_RIGHT_WALL_COORD 70
+#define BOARD_TOP_WALL_COORD 5
+#define BOARD_BOTTOM_WALL_COORD 25
 
-#define SHAPE_SPAWN_X ((BOARD_WIDTH / 2) + BOARD_LEFT_WALL)
-#define SHAPE_SPAWN_Y 5
+#define SHAPE_SPAWN_X ((FULL_BOARD_WIDTH / 2) + BOARD_LEFT_WALL_COORD) // As of now its 64
+#define SHAPE_SPAWN_Y BOARD_TOP_WALL_COORD
 
 #pragma once
 
@@ -62,16 +63,17 @@ void drawBoard(int start_row, int start_column);
 /**
  * Draws the O-shaped tetromino at the specified origin coordinates.
  *
+ * @param state Pointer to the gameState to be updated when rendering
  * @param origin The coordinates of the top-left corner of the O shape.
  */
-void drawO(coords_t origin);
+void renderO(GameState_t *state, coords_t origin);
 
 /**
  * Draws the I-shaped tetromino at the specified origin coordinates.
  *
  * @param origin The coordinates of the top of the I shape.
  */
-void drawI(coords_t origin);
+void renderI(GameState_t *state, coords_t origin);
 
 /**
  * 
@@ -86,8 +88,8 @@ void drawJ(coords_t origin);
 
 void drawT(coords_t origin);
 
-void clear_old_position(Tetromino_t piece, Move_t move);
+void clear_old_position(GameState_t *state, Tetromino_t piece, Move_t move);
 
-void drawShapesTest();
+// void drawShapesTest();
 
 long long get_current_time_ms();

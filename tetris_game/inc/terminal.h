@@ -8,18 +8,6 @@
 #define CLEAR "\033[2J"
 #define CURSOR_HOME "\033[H"
 
-typedef struct {
-    uint32_t value : 20;
-
-} row_t;
-
-typedef struct
-{
-    int board[21][21]; // Array of current game state, when block is full, write 1 to it to indicate object already there.
-    row_t bitboard[21]; // Can use array of these to store board to be more efficient retrievals
-    int lines_completed; // Tracker of lines completed
-} GameState_t;
-
 void reset_terminal(struct termios *original);
 
 /**

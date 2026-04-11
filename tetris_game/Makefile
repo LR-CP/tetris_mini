@@ -2,7 +2,7 @@ CC = gcc
 CFLAGS = -Wall -Wextra -std=c11 -O2 -Iinc
 TARGET = debug/tetris
 
-SRC = src/tetris.c src/draw.c src/input.c src/terminal.c
+SRC = src/tetris.c src/draw.c src/input.c src/terminal.c src/game.c
 
 all: $(TARGET)
 
