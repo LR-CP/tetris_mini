@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <sys/time.h>
 #include "terminal.h"
-#include "game.h"
 
 #define FULL_BOARD_WIDTH 24
 #define FULL_BOARD_HEIGHT 21
@@ -60,35 +59,35 @@ typedef enum Move
  */
 void drawBoard(int start_row, int start_column);
 
-/**
- * Draws the O-shaped tetromino at the specified origin coordinates.
- *
- * @param state Pointer to the gameState to be updated when rendering
- * @param origin The coordinates of the top-left corner of the O shape.
- */
-void renderO(GameState_t *state, coords_t origin);
+// /**
+//  * Draws the O-shaped tetromino at the specified origin coordinates.
+//  *
+//  * @param state Pointer to the gameState to be updated when rendering
+//  * @param origin The coordinates of the top-left corner of the O shape.
+//  */
+// void renderO(GameState_t *state, coords_t origin);
 
-/**
- * Draws the I-shaped tetromino at the specified origin coordinates.
- *
- * @param origin The coordinates of the top of the I shape.
- */
-void renderI(GameState_t *state, coords_t origin);
+// /**
+//  * Draws the I-shaped tetromino at the specified origin coordinates.
+//  *
+//  * @param origin The coordinates of the top of the I shape.
+//  */
+// void renderI(GameState_t *state, coords_t origin);
 
-/**
- * 
- */
-void drawS(coords_t origin);
+// /**
+//  * 
+//  */
+// void drawS(coords_t origin);
 
-void drawZ(coords_t origin);
+// void drawZ(coords_t origin);
 
-void drawL(coords_t origin);
+// void drawL(coords_t origin);
 
-void drawJ(coords_t origin);
+// void drawJ(coords_t origin);
 
-void drawT(coords_t origin);
+// void drawT(coords_t origin);
 
-void clear_old_position(GameState_t *state, Tetromino_t piece, Move_t move);
+// void clear_old_position(GameState_t *state, Tetromino_t piece, Move_t move);
 
 // void drawShapesTest();
 

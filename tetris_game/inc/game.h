@@ -2,7 +2,7 @@
 #include <stdint.h>
 #include <sys/time.h>
 #include "terminal.h"
-// #include "draw.h"
+#include "draw.h"
 
 #pragma once
 
@@ -18,12 +18,12 @@ typedef enum {
 
 typedef struct {
     uint32_t value : GAME_BOARD_WIDTH;
-
 } row_t;
 
 typedef struct
 {
     row_t bitboard[GAME_BOARD_HEIGHT]; // Can use array of these to store board to be more efficient retrievals
+    Tetromino_t active_piece; // Currently active piece
     int lines_completed; // Tracker of lines completed
     time_t game_time; // Game time tracker
     int level; // Current player level
@@ -35,3 +35,5 @@ void print_state_board(GameState_t *state);
 void printb(int line, int n);
 
 void toggle_bit(GameState_t *state, int line, int col);
+
+void updateBoard(GameState_t *state);

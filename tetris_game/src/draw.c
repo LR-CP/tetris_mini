@@ -32,41 +32,41 @@ void drawBoard(int curr_curser_line, int curr_cursor_column)
     printf("  \\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\n");
 }
 
-void renderO(GameState_t *state, coords_t origin)
-{
-    set_cursor(origin.l, origin.c);
-    printf(SHAPE);
-    toggle_bit(state, origin.l, origin.c);
-    set_cursor(origin.l, origin.c + 2);
-    printf(SHAPE);
-    toggle_bit(state, origin.l, origin.c + 2);
-    set_cursor(origin.l + 1, origin.c);
-    printf(SHAPE);
-    toggle_bit(state, origin.l + 1, origin.c);
-    set_cursor(origin.l + 1, origin.c + 2);
-    printf(SHAPE);
-    toggle_bit(state, origin.l + 1, origin.c + 2);
+// void renderO(GameState_t *state, coords_t origin)
+// {
+//     set_cursor(origin.l, origin.c);
+//     printf(SHAPE);
+//     toggle_bit(state, origin.l, origin.c);
+//     set_cursor(origin.l, origin.c + 2);
+//     printf(SHAPE);
+//     toggle_bit(state, origin.l, origin.c + 2);
+//     set_cursor(origin.l + 1, origin.c);
+//     printf(SHAPE);
+//     toggle_bit(state, origin.l + 1, origin.c);
+//     set_cursor(origin.l + 1, origin.c + 2);
+//     printf(SHAPE);
+//     toggle_bit(state, origin.l + 1, origin.c + 2);
 
-    printf("\n");
-}
+//     printf("\n");
+// }
 
-void renderI(GameState_t *state, coords_t origin)
-{
-    set_cursor(origin.l, origin.c);
-    printf(SHAPE);
-    toggle_bit(state, origin.l, origin.c);
-    set_cursor(origin.l + 1, origin.c);
-    printf(SHAPE);
-    toggle_bit(state, origin.l + 1, origin.c);
-    set_cursor(origin.l + 2, origin.c);
-    printf(SHAPE);
-    toggle_bit(state, origin.l + 2, origin.c);
-    set_cursor(origin.l + 3, origin.c);
-    printf(SHAPE);
-    toggle_bit(state, origin.l + 3, origin.c);
+// void renderI(GameState_t *state, coords_t origin)
+// {
+//     set_cursor(origin.l, origin.c);
+//     printf(SHAPE);
+//     toggle_bit(state, origin.l, origin.c);
+//     set_cursor(origin.l + 1, origin.c);
+//     printf(SHAPE);
+//     toggle_bit(state, origin.l + 1, origin.c);
+//     set_cursor(origin.l + 2, origin.c);
+//     printf(SHAPE);
+//     toggle_bit(state, origin.l + 2, origin.c);
+//     set_cursor(origin.l + 3, origin.c);
+//     printf(SHAPE);
+//     toggle_bit(state, origin.l + 3, origin.c);
 
-    printf("\n");
-}
+//     printf("\n");
+// }
 
 void drawS(coords_t origin)
 {
@@ -138,217 +138,217 @@ void drawT(coords_t origin)
     printf("\n");
 }
 
-void clear_old_position(GameState_t *state, Tetromino_t piece, Move_t move)
-{
-    if (piece.type == O_SHAPE)
-    {
-        // Clear top
-        if (move == VERTICAL)
-        {
-            set_cursor(piece.coords.l - 1, piece.coords.c);
-            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
-            // flip bit to be not of current bit
-            // toggle_bit(state, piece.coords.l - 1, piece.coords.c);
-            set_cursor(piece.coords.l - 1, piece.coords.c + 2);
-            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
-            // toggle_bit(state, piece.coords.l - 1, piece.coords.c);
-        }
+// void clear_old_position(GameState_t *state, Tetromino_t piece, Move_t move)
+// {
+//     if (piece.type == O_SHAPE)
+//     {
+//         // Clear top
+//         if (move == VERTICAL)
+//         {
+//             set_cursor(piece.coords.l - 1, piece.coords.c);
+//             piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
+//             // flip bit to be not of current bit
+//             // toggle_bit(state, piece.coords.l - 1, piece.coords.c);
+//             set_cursor(piece.coords.l - 1, piece.coords.c + 2);
+//             piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
+//             // toggle_bit(state, piece.coords.l - 1, piece.coords.c);
+//         }
 
-        // Clear old shape position
-        if (move == HORIZONTAL)
-        {
-            set_cursor(piece.coords.l, piece.coords.c);
-            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
-            // toggle_bit(state, piece.coords.l, piece.coords.c);
-            set_cursor(piece.coords.l, piece.coords.c + 2);
-            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
-            // toggle_bit(state, piece.coords.l, piece.coords.c);
-            set_cursor(piece.coords.l + 1, piece.coords.c);
-            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
-            // toggle_bit(state, piece.coords.l + 1, piece.coords.c);
-            set_cursor(piece.coords.l + 1, piece.coords.c + 2);
-            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
-            // toggle_bit(state, piece.coords.l + 1, piece.coords.c);
-        }
+//         // Clear old shape position
+//         if (move == HORIZONTAL)
+//         {
+//             set_cursor(piece.coords.l, piece.coords.c);
+//             piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
+//             // toggle_bit(state, piece.coords.l, piece.coords.c);
+//             set_cursor(piece.coords.l, piece.coords.c + 2);
+//             piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
+//             // toggle_bit(state, piece.coords.l, piece.coords.c);
+//             set_cursor(piece.coords.l + 1, piece.coords.c);
+//             piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
+//             // toggle_bit(state, piece.coords.l + 1, piece.coords.c);
+//             set_cursor(piece.coords.l + 1, piece.coords.c + 2);
+//             piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
+//             // toggle_bit(state, piece.coords.l + 1, piece.coords.c);
+//         }
 
-        printf("\n");
-    }
-    else if (piece.type == I_SHAPE)
-    {
-        // Clear top
-        if (move == VERTICAL)
-        {
-            set_cursor(piece.coords.l - 1, piece.coords.c);
-            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
-            toggle_bit(state, piece.coords.l - 1, piece.coords.c);
-        }
+//         printf("\n");
+//     }
+//     else if (piece.type == I_SHAPE)
+//     {
+//         // Clear top
+//         if (move == VERTICAL)
+//         {
+//             set_cursor(piece.coords.l - 1, piece.coords.c);
+//             piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
+//             toggle_bit(state, piece.coords.l - 1, piece.coords.c);
+//         }
 
-        // Clear old shape position
-        if (move == HORIZONTAL)
-        {
-            set_cursor(piece.coords.l, piece.coords.c);
-            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
-            toggle_bit(state, piece.coords.l, piece.coords.c);
+//         // Clear old shape position
+//         if (move == HORIZONTAL)
+//         {
+//             set_cursor(piece.coords.l, piece.coords.c);
+//             piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
+//             toggle_bit(state, piece.coords.l, piece.coords.c);
 
-            set_cursor(piece.coords.l + 1, piece.coords.c);
-            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
-            toggle_bit(state, piece.coords.l + 1, piece.coords.c);
+//             set_cursor(piece.coords.l + 1, piece.coords.c);
+//             piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
+//             toggle_bit(state, piece.coords.l + 1, piece.coords.c);
 
-            set_cursor(piece.coords.l + 2, piece.coords.c);
-            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
-            toggle_bit(state, piece.coords.l + 2, piece.coords.c);
+//             set_cursor(piece.coords.l + 2, piece.coords.c);
+//             piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
+//             toggle_bit(state, piece.coords.l + 2, piece.coords.c);
 
-            set_cursor(piece.coords.l + 3, piece.coords.c);
-            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
-            toggle_bit(state, piece.coords.l + 3, piece.coords.c);
-        }
+//             set_cursor(piece.coords.l + 3, piece.coords.c);
+//             piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
+//             toggle_bit(state, piece.coords.l + 3, piece.coords.c);
+//         }
 
-        printf("\n");
-    }
-    else if (piece.type == S_SHAPE)
-    {
-        // Clear top
-        if (move == VERTICAL)
-        {
-            set_cursor(piece.coords.l - 1, piece.coords.c + 2);
-            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
-            set_cursor(piece.coords.l - 1, piece.coords.c + 4);
-            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
-            set_cursor(piece.coords.l, piece.coords.c);
-            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
-        }
+//         printf("\n");
+//     }
+//     else if (piece.type == S_SHAPE)
+//     {
+//         // Clear top
+//         if (move == VERTICAL)
+//         {
+//             set_cursor(piece.coords.l - 1, piece.coords.c + 2);
+//             piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
+//             set_cursor(piece.coords.l - 1, piece.coords.c + 4);
+//             piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
+//             set_cursor(piece.coords.l, piece.coords.c);
+//             piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
+//         }
 
-        // Clear old shape position
-        if (move == HORIZONTAL)
-        {
-            set_cursor(piece.coords.l, piece.coords.c + 2);
-            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
-            set_cursor(piece.coords.l, piece.coords.c + 4);
-            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
-            set_cursor(piece.coords.l + 1, piece.coords.c);
-            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
-            set_cursor(piece.coords.l + 1, piece.coords.c + 2);
-            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
-        }
+//         // Clear old shape position
+//         if (move == HORIZONTAL)
+//         {
+//             set_cursor(piece.coords.l, piece.coords.c + 2);
+//             piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
+//             set_cursor(piece.coords.l, piece.coords.c + 4);
+//             piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
+//             set_cursor(piece.coords.l + 1, piece.coords.c);
+//             piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
+//             set_cursor(piece.coords.l + 1, piece.coords.c + 2);
+//             piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
+//         }
 
-        printf("\n");
-    }
-    else if (piece.type == Z_SHAPE)
-    {
-        // Clear top
-        if (move == VERTICAL)
-        {
-            set_cursor(piece.coords.l, piece.coords.c + 4);
-            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
-            set_cursor(piece.coords.l - 1, piece.coords.c);
-            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
-            set_cursor(piece.coords.l - 1, piece.coords.c + 2);
-            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
-        }
+//         printf("\n");
+//     }
+//     else if (piece.type == Z_SHAPE)
+//     {
+//         // Clear top
+//         if (move == VERTICAL)
+//         {
+//             set_cursor(piece.coords.l, piece.coords.c + 4);
+//             piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
+//             set_cursor(piece.coords.l - 1, piece.coords.c);
+//             piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
+//             set_cursor(piece.coords.l - 1, piece.coords.c + 2);
+//             piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
+//         }
 
-        // Clear old shape position
-        if (move == HORIZONTAL)
-        {
-            set_cursor(piece.coords.l, piece.coords.c);
-            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
-            set_cursor(piece.coords.l, piece.coords.c + 2);
-            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
-            set_cursor(piece.coords.l + 1, piece.coords.c + 2);
-            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
-            set_cursor(piece.coords.l + 1, piece.coords.c + 4);
-            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
-        }
+//         // Clear old shape position
+//         if (move == HORIZONTAL)
+//         {
+//             set_cursor(piece.coords.l, piece.coords.c);
+//             piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
+//             set_cursor(piece.coords.l, piece.coords.c + 2);
+//             piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
+//             set_cursor(piece.coords.l + 1, piece.coords.c + 2);
+//             piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
+//             set_cursor(piece.coords.l + 1, piece.coords.c + 4);
+//             piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
+//         }
 
-        printf("\n");
-    }
-    else if (piece.type == L_SHAPE)
-    {
-        // Clear top
-        if (move == VERTICAL)
-        {
-            set_cursor(piece.coords.l, piece.coords.c + 2);
-            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
-            set_cursor(piece.coords.l + 1, piece.coords.c + 2);
-            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
-            set_cursor(piece.coords.l - 1, piece.coords.c);
-            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
-            set_cursor(piece.coords.l - 1, piece.coords.c + 2);
-            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
-        }
+//         printf("\n");
+//     }
+//     else if (piece.type == L_SHAPE)
+//     {
+//         // Clear top
+//         if (move == VERTICAL)
+//         {
+//             set_cursor(piece.coords.l, piece.coords.c + 2);
+//             piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
+//             set_cursor(piece.coords.l + 1, piece.coords.c + 2);
+//             piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
+//             set_cursor(piece.coords.l - 1, piece.coords.c);
+//             piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
+//             set_cursor(piece.coords.l - 1, piece.coords.c + 2);
+//             piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
+//         }
 
-        // Clear old shape position
-        if (move == HORIZONTAL)
-        {
-            set_cursor(piece.coords.l, piece.coords.c);
-            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
-            set_cursor(piece.coords.l + 1, piece.coords.c);
-            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
-            set_cursor(piece.coords.l + 2, piece.coords.c);
-            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
-            set_cursor(piece.coords.l + 2, piece.coords.c + 2);
-            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
-        }
+//         // Clear old shape position
+//         if (move == HORIZONTAL)
+//         {
+//             set_cursor(piece.coords.l, piece.coords.c);
+//             piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
+//             set_cursor(piece.coords.l + 1, piece.coords.c);
+//             piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
+//             set_cursor(piece.coords.l + 2, piece.coords.c);
+//             piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
+//             set_cursor(piece.coords.l + 2, piece.coords.c + 2);
+//             piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
+//         }
 
-        printf("\n");
-    }
-    else if (piece.type == J_SHAPE)
-    {
-        // Clear top
-        if (move == VERTICAL)
-        {
-            set_cursor(piece.coords.l, piece.coords.c);
-            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
-            set_cursor(piece.coords.l + 1, piece.coords.c);
-            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
-            set_cursor(piece.coords.l - 1, piece.coords.c);
-            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
-            set_cursor(piece.coords.l - 1, piece.coords.c + 2);
-            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
-        }
+//         printf("\n");
+//     }
+//     else if (piece.type == J_SHAPE)
+//     {
+//         // Clear top
+//         if (move == VERTICAL)
+//         {
+//             set_cursor(piece.coords.l, piece.coords.c);
+//             piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
+//             set_cursor(piece.coords.l + 1, piece.coords.c);
+//             piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
+//             set_cursor(piece.coords.l - 1, piece.coords.c);
+//             piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
+//             set_cursor(piece.coords.l - 1, piece.coords.c + 2);
+//             piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
+//         }
 
-        // Clear old shape position
-        if (move == HORIZONTAL)
-        {
-            set_cursor(piece.coords.l, piece.coords.c + 2);
-            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
-            set_cursor(piece.coords.l + 1, piece.coords.c + 2);
-            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
-            set_cursor(piece.coords.l + 2, piece.coords.c + 2);
-            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
-            set_cursor(piece.coords.l + 2, piece.coords.c);
-            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
-        }
-        printf("\n");
-    }
-    else if (piece.type == T_SHAPE)
-    {
-        // Clear top
-        if (move == VERTICAL)
-        {
-            set_cursor(piece.coords.l - 1, piece.coords.c + 4);
-            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
-            set_cursor(piece.coords.l - 1, piece.coords.c);
-            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
-            set_cursor(piece.coords.l - 1, piece.coords.c + 2);
-            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
-        }
+//         // Clear old shape position
+//         if (move == HORIZONTAL)
+//         {
+//             set_cursor(piece.coords.l, piece.coords.c + 2);
+//             piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
+//             set_cursor(piece.coords.l + 1, piece.coords.c + 2);
+//             piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
+//             set_cursor(piece.coords.l + 2, piece.coords.c + 2);
+//             piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
+//             set_cursor(piece.coords.l + 2, piece.coords.c);
+//             piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
+//         }
+//         printf("\n");
+//     }
+//     else if (piece.type == T_SHAPE)
+//     {
+//         // Clear top
+//         if (move == VERTICAL)
+//         {
+//             set_cursor(piece.coords.l - 1, piece.coords.c + 4);
+//             piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
+//             set_cursor(piece.coords.l - 1, piece.coords.c);
+//             piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
+//             set_cursor(piece.coords.l - 1, piece.coords.c + 2);
+//             piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
+//         }
 
-        // Clear old shape position
-        if (move == HORIZONTAL)
-        {
-            set_cursor(piece.coords.l, piece.coords.c);
-            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
-            set_cursor(piece.coords.l, piece.coords.c + 2);
-            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
-            set_cursor(piece.coords.l, piece.coords.c + 4);
-            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
-            set_cursor(piece.coords.l + 1, piece.coords.c + 2);
-            piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
-        }
+//         // Clear old shape position
+//         if (move == HORIZONTAL)
+//         {
+//             set_cursor(piece.coords.l, piece.coords.c);
+//             piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
+//             set_cursor(piece.coords.l, piece.coords.c + 2);
+//             piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
+//             set_cursor(piece.coords.l, piece.coords.c + 4);
+//             piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
+//             set_cursor(piece.coords.l + 1, piece.coords.c + 2);
+//             piece.coords.c % 2 == 0 ? printf(" .") : printf("  ");
+//         }
 
-        printf("\n");
-    }
-}
+//         printf("\n");
+//     }
+// }
 
 // void drawShapesTest()
 // {

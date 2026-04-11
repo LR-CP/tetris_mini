@@ -23,13 +23,13 @@ int main(int argc, char *argv[])
 
     GameState_t gameState = {0}; // Clear out struct to all 0's (for array mainly)
 
-    clear_screen();
-    cursor_home();
-    show_cursor();
+    // clear_screen();
+    // cursor_home();
+    // show_cursor();
 
-    drawBoard(start_row, start_column);
+    // drawBoard(start_row, start_column);
 
-    hide_cursor();
+    // hide_cursor();
     // drawShapesTest();
 
     // Make array of pieces to randomly choose from for spawn.
@@ -41,101 +41,107 @@ int main(int argc, char *argv[])
                             {.type = L_SHAPE, .coords = (coords_t){.c = SHAPE_SPAWN_X, .l = SHAPE_SPAWN_Y}, .height = 3, .width = 4},
                             {.type = J_SHAPE, .coords = (coords_t){.c = SHAPE_SPAWN_X, .l = SHAPE_SPAWN_Y}, .height = 3, .width = 4},
                             {.type = T_SHAPE, .coords = (coords_t){.c = SHAPE_SPAWN_X, .l = SHAPE_SPAWN_Y}, .height = 2, .width = 6}};
-    Tetromino_t active_piece = pieces[1]; // Choose random piece to start.
+    gameState.active_piece = pieces[0]; // Choose random piece to start.
 
     char input = 0;
     int frameCount = 0;
     BOOL_t rendered = FALSE;
+    clear_screen();
 
     while (1) // Main game loop, press 'q' to quit
     {
-        // Render active piece
         if (rendered == FALSE)
         {
-            switch (active_piece.type)
-            {
-            case O_SHAPE:
-                renderO(&gameState, active_piece.coords);
-                break;
-            case I_SHAPE:
-                renderI(&gameState, active_piece.coords);
-                break;
-            case S_SHAPE:
-                drawS(active_piece.coords);
-                break;
-            case Z_SHAPE:
-                drawZ(active_piece.coords);
-                break;
-            case L_SHAPE:
-                drawL(active_piece.coords);
-                break;
-            case J_SHAPE:
-                drawJ(active_piece.coords);
-                break;
-            case T_SHAPE:
-                drawT(active_piece.coords);
-                break;
-            default:
-                break;
-            }
+            updateBoard(&gameState);
             rendered = TRUE;
         }
+        // Render active piece
+        // if (rendered == FALSE)
+        // {
+        //     switch (active_piece.type)
+        //     {
+        // case O_SHAPE:
+        //     renderO(&gameState, active_piece.coords);
+        //     break;
+        // case I_SHAPE:
+        //     renderI(&gameState, active_piece.coords);
+        //     break;
+        // case S_SHAPE:
+        //     drawS(active_piece.coords);
+        //     break;
+        // case Z_SHAPE:
+        //     drawZ(active_piece.coords);
+        //     break;
+        // case L_SHAPE:
+        //     drawL(active_piece.coords);
+        //     break;
+        // case J_SHAPE:
+        //     drawJ(active_piece.coords);
+        //     break;
+        // case T_SHAPE:
+        //     drawT(active_piece.coords);
+        //     break;
+        //     default:
+        //         break;
+        //     }
+        //     rendered = TRUE;
+        // }
 
         print_state_board(&gameState);
 
-        // Check collisions
-        if (active_piece.coords.l + active_piece.height > BOARD_BOTTOM_WALL_COORD)
-        {
-            active_piece = pieces[1]; // Spawn new piece
-            rendered = FALSE; // new piece to be rendered
-        }
-        
-        // Listen for keypress
-        if (keyboard_input())
-        {
-            if (read(STDIN_FILENO, &input, 1) > 0)
-            {
-                rendered = 0;
-                // listen for inputs (from keyboard or gamepad)pe
-                if (input == 'q')
-                {
-                    // quit game
-                    break;
-                }
-                else if (input == 'a' && active_piece.coords.c > BOARD_LEFT_WALL_COORD) // Since all shapes builf from origin, no width needed to be added here
-                {
-                    // need to redraw old position of piece with blank spaces to "erase" it
-                    clear_old_position(&gameState, active_piece, HORIZONTAL);
-                    // move piece left
-                    active_piece.coords.c -= 2;
-                    rendered = FALSE;
-                }
-                else if (input == 'd' && (active_piece.coords.c) <= (BOARD_RIGHT_WALL_COORD - active_piece.width))
-                {
-                    // move piece right
-                    clear_old_position(&gameState, active_piece, HORIZONTAL);
-                    active_piece.coords.c += 2;
-                    rendered = FALSE;
-                }
-                else if (input == 's' && active_piece.coords.l + (active_piece.height + 1) < BOARD_BOTTOM_WALL_COORD)
-                {
-                    // move piece down faster
-                    clear_old_position(&gameState, active_piece, VERTICAL);
-                    active_piece.coords.l += 1;
-                    rendered = FALSE;
-                }
-                else if (input == 'w')
-                {
-                    // rotate piece
-                }
-            }
-        }
-        else
-        {
-            input = 0; // No input
-        }
+        // // Check collisions
+        // if (active_piece.coords.l + active_piece.height > BOARD_BOTTOM_WALL_COORD)
+        // {
+        //     active_piece = pieces[1]; // Spawn new piece
+        //     rendered = FALSE; // new piece to be rendered
+        // }
 
-        // Move the piece down 1 block per second (gravity)
+        // // Listen for keypress
+        // if (keyboard_input())
+        // {
+        //     if (read(STDIN_FILENO, &input, 1) > 0)
+        //     {
+        //         rendered = 0;
+        //         // listen for inputs (from keyboard or gamepad)pe
+        //         if (input == 'q')
+        //         {
+        //             // quit game
+        //             break;
+        //         }
+        //         else if (input == 'a' && active_piece.coords.c > BOARD_LEFT_WALL_COORD) // Since all shapes builf from origin, no width needed to be added here
+        //         {
+        //             // need to redraw old position of piece with blank spaces to "erase" it
+        //             clear_old_position(&gameState, active_piece, HORIZONTAL);
+        //             // move piece left
+        //             active_piece.coords.c -= 2;
+        //             rendered = FALSE;
+        //         }
+        //         else if (input == 'd' && (active_piece.coords.c) <= (BOARD_RIGHT_WALL_COORD - active_piece.width))
+        //         {
+        //             // move piece right
+        //             clear_old_position(&gameState, active_piece, HORIZONTAL);
+        //             active_piece.coords.c += 2;
+        //             rendered = FALSE;
+        //         }
+        //         else if (input == 's' && active_piece.coords.l + (active_piece.height + 1) < BOARD_BOTTOM_WALL_COORD)
+        //         {
+        //             // move piece down faster
+        //             clear_old_position(&gameState, active_piece, VERTICAL);
+        //             active_piece.coords.l += 1;
+        //             rendered = FALSE;
+        //         }
+        //         else if (input == 'w')
+        //         {
+        //             // rotate piece
+        //         }
+        //     }
+        // }
+        // else
+        // {
+        //     input = 0; // No input
+        // }
+
+        // // Move the piece down 1 block per second (gravity)
         if (get_current_time_ms() - start_time >= fall_time)
         {
             start_time = get_current_time_ms();
@@ -144,15 +150,15 @@ int main(int argc, char *argv[])
             // Move piece down every iteration of the loop
             // need to redraw old position of piece with blank spaces to "erase" it
             // rendered = 0;
-            clear_old_position(&gameState, active_piece, VERTICAL);
+            // clear_old_position(&gameState, active_piece, VERTICAL);
             // rendered = FALSE;
             // rendered = 1;
         }
     }
 
-    show_cursor();
-    clear_screen();
-    reset_terminal(&orig_t);
+    // show_cursor();
+    // clear_screen();
+    // reset_terminal(&orig_t);
 
     return 0;
 }
