@@ -6,9 +6,7 @@
 // TODO: Add collisions of pieces together (might need some sort of game/board state manager)
 // TODO: Implement score tracking, timer, lines completed, and other game logic
 // TODO: Implement next shape render on the left side of the game board
-
-// BUG: Fix the vertical rendering of the shape in the bitboard and add lock for when to render or not
-
+//TODO: I don't need to pass whole game state into each func, should pass sub struct in
 /**
  * The main function initializes the Tetris game, clears the screen, and sets up the initial state.
  * It then enters an infinite loop to handle user input and render the game visuals.
@@ -20,6 +18,7 @@ int main(int argc, char *argv[])
     long long start_time = get_current_time_ms();
     long long fall_time = 100;
     struct termios orig_t = set_raw_mode();
+    srand(time(NULL));
 
     GameState_t gameState = {0}; // Clear out struct to all 0's (for array mainly)
 
@@ -33,126 +32,95 @@ int main(int argc, char *argv[])
     // drawShapesTest();
 
     // Make array of pieces to randomly choose from for spawn.
-    // Width needed to be adjusted by factor of 2 since piece is 2 chars long, thats why borders weren't working before
-    Tetromino_t pieces[] = {{.type = O_SHAPE, .coords = (coords_t){.c = SHAPE_SPAWN_X, .l = SHAPE_SPAWN_Y}, .height = 2, .width = 3},
-                            {.type = I_SHAPE, .coords = (coords_t){.c = SHAPE_SPAWN_X, .l = SHAPE_SPAWN_Y}, .height = 4, .width = 1},
-                            {.type = S_SHAPE, .coords = (coords_t){.c = SHAPE_SPAWN_X, .l = SHAPE_SPAWN_Y}, .height = 2, .width = 6},
-                            {.type = Z_SHAPE, .coords = (coords_t){.c = SHAPE_SPAWN_X, .l = SHAPE_SPAWN_Y}, .height = 2, .width = 6},
-                            {.type = L_SHAPE, .coords = (coords_t){.c = SHAPE_SPAWN_X, .l = SHAPE_SPAWN_Y}, .height = 3, .width = 4},
-                            {.type = J_SHAPE, .coords = (coords_t){.c = SHAPE_SPAWN_X, .l = SHAPE_SPAWN_Y}, .height = 3, .width = 4},
-                            {.type = T_SHAPE, .coords = (coords_t){.c = SHAPE_SPAWN_X, .l = SHAPE_SPAWN_Y}, .height = 2, .width = 6}};
-    gameState.active_piece = pieces[0]; // Choose random piece to start.
+    Tetromino_t pieces[] = {{.type = O_SHAPE, .coords = {.p1 = {0, 0}, .p2 = {1, 0}, .p3 = {0, 1}, .p4 = {1, 1}}, .prev_coords = {0}, .height = 2, .width = 1},
+                            {.type = I_SHAPE, .coords = {.p1 = {0, 0}, .p2 = {0, 1}, .p3 = {0, 2}, .p4 = {0, 3}}, .prev_coords = {0}, .height = 4, .width = 1},
+                            {.type = S_SHAPE, .coords = {.p1 = {1, 0}, .p2 = {2, 0}, .p3 = {0, 1}, .p4 = {1, 1}}, .prev_coords = {0}, .height = 2, .width = 3},
+                            {.type = Z_SHAPE, .coords = {.p1 = {0, 0}, .p2 = {1, 0}, .p3 = {1, 1}, .p4 = {2, 1}}, .prev_coords = {0}, .height = 2, .width = 3},
+                            {.type = L_SHAPE, .coords = {.p1 = {0, 0}, .p2 = {0, 1}, .p3 = {0, 2}, .p4 = {1, 2}}, .prev_coords = {0}, .height = 3, .width = 2},
+                            {.type = J_SHAPE, .coords = {.p1 = {1, 0}, .p2 = {1, 1}, .p3 = {1, 2}, .p4 = {0, 2}}, .prev_coords = {0}, .height = 3, .width = 2},
+                            {.type = T_SHAPE, .coords = {.p1 = {0, 0}, .p2 = {1, 0}, .p3 = {2, 0}, .p4 = {1, 1}}, .prev_coords = {0}, .height = 2, .width = 3}};
+    gameState.active_piece = pieces[rand() % 7]; // Choose random piece to start.
 
     char input = 0;
-    int frameCount = 0;
-    BOOL_t rendered = FALSE;
-    clear_screen();
+    redraw_shape(&gameState); // Initial update of state for adding shape to bitboard
 
     while (1) // Main game loop, press 'q' to quit
     {
-        if (rendered == FALSE)
-        {
-            updateBoard(&gameState);
-            rendered = TRUE;
-        }
-        // Render active piece
-        // if (rendered == FALSE)
-        // {
-        //     switch (active_piece.type)
-        //     {
-        // case O_SHAPE:
-        //     renderO(&gameState, active_piece.coords);
-        //     break;
-        // case I_SHAPE:
-        //     renderI(&gameState, active_piece.coords);
-        //     break;
-        // case S_SHAPE:
-        //     drawS(active_piece.coords);
-        //     break;
-        // case Z_SHAPE:
-        //     drawZ(active_piece.coords);
-        //     break;
-        // case L_SHAPE:
-        //     drawL(active_piece.coords);
-        //     break;
-        // case J_SHAPE:
-        //     drawJ(active_piece.coords);
-        //     break;
-        // case T_SHAPE:
-        //     drawT(active_piece.coords);
-        //     break;
-        //     default:
-        //         break;
-        //     }
-        //     rendered = TRUE;
-        // }
-
+        clear_screen();
         print_state_board(&gameState);
 
-        // // Check collisions
-        // if (active_piece.coords.l + active_piece.height > BOARD_BOTTOM_WALL_COORD)
-        // {
-        //     active_piece = pieces[1]; // Spawn new piece
-        //     rendered = FALSE; // new piece to be rendered
-        // }
+        // Listen for keypress
+        if (keyboard_input())
+        {
+            if (read(STDIN_FILENO, &input, 1) > 0)
+            {
+                // listen for inputs (from keyboard or gamepad)
+                if (input == 'q')
+                {
+                    // quit game
+                    break;
+                }
+                else if (input == 'a')
+                {
+                    // move piece left
+                    gameState.active_piece.prev_coords = gameState.active_piece.coords;
+                    move_piece_left(&gameState);
+                    redraw_shape(&gameState);
+                }
+                else if (input == 'd')
+                {
+                    // move piece right
+                    gameState.active_piece.prev_coords = gameState.active_piece.coords;
+                    move_piece_right(&gameState);
+                    redraw_shape(&gameState);
+                }
+                else if (input == 's')
+                {
+                    // move piece down faster
+                    gameState.active_piece.prev_coords = gameState.active_piece.coords;
+                    move_piece_down(&gameState);
+                    redraw_shape(&gameState);
+                }
+                else if (input == 'w')
+                {
+                    // rotate piece
+                    switch(gameState.active_piece.rotation_state)
+                    {
+                        case NORMAL: // Rotate right
+                            break;
+                        case RIGHT: // Rotate Upside down
+                            break;
+                        case UPSIDE_DOWN: // Rotate left
+                            break;
+                        case LEFT: // Rotate back to normal
+                            break;
+                        default:
+                            break;
+                    };
+                }
+            }
+        }
+        else
+        {
+            input = 0; // No input
+        }
 
-        // // Listen for keypress
-        // if (keyboard_input())
-        // {
-        //     if (read(STDIN_FILENO, &input, 1) > 0)
-        //     {
-        //         rendered = 0;
-        //         // listen for inputs (from keyboard or gamepad)pe
-        //         if (input == 'q')
-        //         {
-        //             // quit game
-        //             break;
-        //         }
-        //         else if (input == 'a' && active_piece.coords.c > BOARD_LEFT_WALL_COORD) // Since all shapes builf from origin, no width needed to be added here
-        //         {
-        //             // need to redraw old position of piece with blank spaces to "erase" it
-        //             clear_old_position(&gameState, active_piece, HORIZONTAL);
-        //             // move piece left
-        //             active_piece.coords.c -= 2;
-        //             rendered = FALSE;
-        //         }
-        //         else if (input == 'd' && (active_piece.coords.c) <= (BOARD_RIGHT_WALL_COORD - active_piece.width))
-        //         {
-        //             // move piece right
-        //             clear_old_position(&gameState, active_piece, HORIZONTAL);
-        //             active_piece.coords.c += 2;
-        //             rendered = FALSE;
-        //         }
-        //         else if (input == 's' && active_piece.coords.l + (active_piece.height + 1) < BOARD_BOTTOM_WALL_COORD)
-        //         {
-        //             // move piece down faster
-        //             clear_old_position(&gameState, active_piece, VERTICAL);
-        //             active_piece.coords.l += 1;
-        //             rendered = FALSE;
-        //         }
-        //         else if (input == 'w')
-        //         {
-        //             // rotate piece
-        //         }
-        //     }
-        // }
-        // else
-        // {
-        //     input = 0; // No input
-        // }
+        // Check collisions (should be another func called checkCollisions so it can be called in keypress logic)
+        if (gameState.active_piece.coords.p4.y == GAME_BOARD_HEIGHT - 1) // Collision with bottom of board
+        {
+            gameState.active_piece = pieces[rand() % 7]; // Spawn new piece
+            redraw_shape(&gameState);
+            continue;
+        }
 
-        // // Move the piece down 1 block per second (gravity)
+        // Move the piece down 1 block per second (gravity)
         if (get_current_time_ms() - start_time >= fall_time)
         {
             start_time = get_current_time_ms();
-            // active_piece.coords.l++; // Move piece down by incrementing the l coordinate
-
-            // Move piece down every iteration of the loop
-            // need to redraw old position of piece with blank spaces to "erase" it
-            // rendered = 0;
-            // clear_old_position(&gameState, active_piece, VERTICAL);
-            // rendered = FALSE;
-            // rendered = 1;
+            gameState.active_piece.prev_coords = gameState.active_piece.coords;
+            increase_gravity(&gameState);
+            redraw_shape(&gameState);
+            sleep(1);
         }
     }
 

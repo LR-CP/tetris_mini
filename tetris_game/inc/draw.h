@@ -17,15 +17,6 @@
 
 #define SHAPE "[]"
 
-/**
- * Structure to represent the coordinates of a piece on the board.
- */
-typedef struct
-{
-    int c; // X position of the piece on the board
-    int l; // Y position of the piece on the board
-} coords_t;
-
 typedef enum Shape
 {
     O_SHAPE,
@@ -37,10 +28,41 @@ typedef enum Shape
     T_SHAPE
 } Shape_t;
 
+/**
+ * Structure to represent coordinates.
+ */
+typedef struct
+{
+    int x; // X position of the piece on the board
+    int y; // Y position of the piece on the board
+} coord_t;
+
+/**
+ * Structure to represent the location of a piece
+ * on the board
+ */
+typedef struct
+{
+    coord_t p1;
+    coord_t p2;
+    coord_t p3;
+    coord_t p4;
+} coords_t;
+
+typedef enum 
+{
+    NORMAL,
+    LEFT,
+    RIGHT,
+    UPSIDE_DOWN
+} Rotations_t;
+
 typedef struct
 {
     Shape_t type;
     coords_t coords;
+    coords_t prev_coords;
+    Rotations_t rotation_state;
     int height;
     int width;
 } Tetromino_t;

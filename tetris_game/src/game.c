@@ -1,21 +1,26 @@
 #include "game.h"
 
-// Flip the bit in the gamestate represented by the coords of a shape
-void toggle_bit(GameState_t *state, int line, int col)
+// Converts coordinate on board to bit position and flip the bit in the gamestate
+void toggle_bit(GameState_t *state, coord_t bit_coord)
 {
-    int norm_line = line - 5;      // 5 is BOARD_TOP_WALL_COORD
-    int norm_col = (col - 52) / 2; // 52 is BOARD_LEFT_WALL_COORD
-    state->bitboard[norm_line].value ^= (1 << norm_col);
+    // int norm_line = line - BOARD_TOP_WALL_COORD;
+    // int norm_col = (col - BOARD_LEFT_WALL_COORD) / 2;
+    state->bitboard[bit_coord.y].value ^= (1 << bit_coord.x);
     return;
 }
 
-void printb(int line, int n)
+int extract_bit(GameState_t *state, coord_t bit_coord)
+{
+    return (state->bitboard[bit_coord.y].value >> bit_coord.x) & 1;
+}
+
+void _printb(int line, int n)
 {
     // Iterate through all 32 bits of a standard integer
-    for (int i = GAME_BOARD_WIDTH - 1; i >= 0; i--)
+    for (int i = 0; i <= GAME_BOARD_WIDTH - 1; i++)
     {
         int k = n >> i;
-        set_cursor(line + DEBUG_GAME_BOARD_Y_COORD, i + DEBUG_GAME_BOARD_X_COORD);
+        // set_cursor(line + DEBUG_GAME_BOARD_Y_COORD, i + DEBUG_GAME_BOARD_X_COORD);
         if (k & 1)
             printf("1");
         else
@@ -26,62 +31,80 @@ void printb(int line, int n)
 
 void print_state_board(GameState_t *state)
 {
-    set_cursor(DEBUG_GAME_BOARD_Y_COORD, DEBUG_GAME_BOARD_X_COORD);
-    for (int i = 0; i < GAME_BOARD_HEIGHT; i++)
+    // set_cursor(DEBUG_GAME_BOARD_Y_COORD, DEBUG_GAME_BOARD_X_COORD);
+    for (int i = 1; i <= GAME_BOARD_HEIGHT; i++)
     {
-        printb(i, state->bitboard[i].value);
+        _printb(i, state->bitboard[i - 1].value);
     }
 }
 
-void updateBoard(GameState_t *state)
+void increase_gravity(GameState_t *state)
 {
-    if (state->active_piece.type == O_SHAPE)
+    state->active_piece.coords.p1.y++; // Move piece down by incrementing the y coordinate
+    state->active_piece.coords.p2.y++; // Move piece down by incrementing the y coordinate
+    state->active_piece.coords.p3.y++; // Move piece down by incrementing the y coordinate
+    state->active_piece.coords.p4.y++; // Move piece down by incrementing the y coordinate
+}
+
+void redraw_shape(GameState_t *state)
+{
+    // For redraws I only need to redraw first and last row
+    // Clear old shape
+    toggle_bit(state, state->active_piece.prev_coords.p1);
+    toggle_bit(state, state->active_piece.prev_coords.p2);
+    toggle_bit(state, state->active_piece.prev_coords.p3);
+    toggle_bit(state, state->active_piece.prev_coords.p4);
+
+    // Draw new shape
+    toggle_bit(state, state->active_piece.coords.p1);
+    toggle_bit(state, state->active_piece.coords.p2);
+    toggle_bit(state, state->active_piece.coords.p3);
+    toggle_bit(state, state->active_piece.coords.p4);
+}
+
+void move_piece_right(GameState_t *state)
+{
+    if (state->active_piece.coords.p1.x < GAME_BOARD_WIDTH - 1 &&
+        state->active_piece.coords.p2.x < GAME_BOARD_WIDTH - 1 &&
+        state->active_piece.coords.p3.x < GAME_BOARD_WIDTH - 1 &&
+        state->active_piece.coords.p4.x < GAME_BOARD_WIDTH - 1)
     {
-        toggle_bit(state, state->active_piece.coords.l, state->active_piece.coords.c);
-        toggle_bit(state, state->active_piece.coords.l, state->active_piece.coords.c + 2);
-        toggle_bit(state, state->active_piece.coords.l + 1, state->active_piece.coords.c);
-        toggle_bit(state, state->active_piece.coords.l + 1, state->active_piece.coords.c + 2);
-    }
-    else if (state->active_piece.type == I_SHAPE)
-    {
-        toggle_bit(state, state->active_piece.coords.l, state->active_piece.coords.c);
-        toggle_bit(state, state->active_piece.coords.l + 1, state->active_piece.coords.c);
-        toggle_bit(state, state->active_piece.coords.l + 2, state->active_piece.coords.c);
-        toggle_bit(state, state->active_piece.coords.l + 3, state->active_piece.coords.c);
-    }
-    else if (state->active_piece.type == S_SHAPE)
-    {
-        toggle_bit(state, state->active_piece.coords.l, state->active_piece.coords.c + 2);
-        toggle_bit(state, state->active_piece.coords.l, state->active_piece.coords.c + 4);
-        toggle_bit(state, state->active_piece.coords.l + 1, state->active_piece.coords.c);
-        toggle_bit(state, state->active_piece.coords.l + 1, state->active_piece.coords.c + 2);
-    }
-    else if (state->active_piece.type == Z_SHAPE)
-    {
-        toggle_bit(state, state->active_piece.coords.l, state->active_piece.coords.c);
-        toggle_bit(state, state->active_piece.coords.l, state->active_piece.coords.c + 2);
-        toggle_bit(state, state->active_piece.coords.l + 1, state->active_piece.coords.c + 2);
-        toggle_bit(state, state->active_piece.coords.l + 1, state->active_piece.coords.c + 4);
-    }
-    else if (state->active_piece.type == L_SHAPE)
-    {
-        toggle_bit(state, state->active_piece.coords.l, state->active_piece.coords.c);
-        toggle_bit(state, state->active_piece.coords.l + 1, state->active_piece.coords.c);
-        toggle_bit(state, state->active_piece.coords.l + 2, state->active_piece.coords.c);
-        toggle_bit(state, state->active_piece.coords.l + 2, state->active_piece.coords.c + 2);
-    }
-    else if (state->active_piece.type == J_SHAPE)
-    {
-        toggle_bit(state, state->active_piece.coords.l, state->active_piece.coords.c + 2);
-        toggle_bit(state, state->active_piece.coords.l + 1, state->active_piece.coords.c + 2);
-        toggle_bit(state, state->active_piece.coords.l + 2, state->active_piece.coords.c + 2);
-        toggle_bit(state, state->active_piece.coords.l + 2, state->active_piece.coords.c);
-    }
-    else if (state->active_piece.type == T_SHAPE)
-    {
-        toggle_bit(state, state->active_piece.coords.l, state->active_piece.coords.c);
-        toggle_bit(state, state->active_piece.coords.l, state->active_piece.coords.c + 2);
-        toggle_bit(state, state->active_piece.coords.l, state->active_piece.coords.c + 4);
-        toggle_bit(state, state->active_piece.coords.l + 1, state->active_piece.coords.c + 2);
+        state->active_piece.coords.p1.x++;
+        state->active_piece.coords.p2.x++;
+        state->active_piece.coords.p3.x++;
+        state->active_piece.coords.p4.x++;
     }
 }
+
+void move_piece_left(GameState_t *state)
+{
+    if (state->active_piece.coords.p1.x > GAME_BOARD_WIDTH &&
+        state->active_piece.coords.p2.x > GAME_BOARD_WIDTH &&
+        state->active_piece.coords.p3.x > GAME_BOARD_WIDTH &&
+        state->active_piece.coords.p4.x > GAME_BOARD_WIDTH)
+    {
+        state->active_piece.coords.p1.x--;
+        state->active_piece.coords.p2.x--;
+        state->active_piece.coords.p3.x--;
+        state->active_piece.coords.p4.x--;
+    }
+}
+
+void move_piece_down(GameState_t *state)
+{
+    if (state->active_piece.coords.p1.y < GAME_BOARD_HEIGHT - 1 &&
+        state->active_piece.coords.p2.y < GAME_BOARD_HEIGHT - 1 &&
+        state->active_piece.coords.p3.y < GAME_BOARD_HEIGHT - 1 &&
+        state->active_piece.coords.p4.y < GAME_BOARD_HEIGHT - 1)
+    {
+        state->active_piece.coords.p1.y++;
+        state->active_piece.coords.p2.y++;
+        state->active_piece.coords.p3.y++;
+        state->active_piece.coords.p4.y++;
+    }
+}
+
+// void updateState(GameState_t *state)
+// {
+//     redraw_shape(state);
+// }
