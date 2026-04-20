@@ -104,7 +104,30 @@ void move_piece_down(GameState_t *state)
     }
 }
 
-// void updateState(GameState_t *state)
-// {
-//     redraw_shape(state);
-// }
+void rotate_piece(GameState_t *state)
+{
+    switch (state->active_piece.type == O_SHAPE)
+    {
+    case O_SHAPE:
+        break;
+    case I_SHAPE:
+        // P1 rotation
+        state->active_piece.coords.p1.x++;
+        state->active_piece.coords.p1.y++;
+
+        // No change for P2 as it is focal point
+
+        // P3 rotation
+        state->active_piece.coords.p3.x--;
+        state->active_piece.coords.p3.y--;
+
+        // P4 rotation
+        state->active_piece.coords.p4.x -= 2;
+        state->active_piece.coords.p4.y -= 2;
+    case S_SHAPE:
+        
+        break;
+    default:
+        break;
+    };
+}

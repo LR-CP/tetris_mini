@@ -19,7 +19,7 @@ typedef enum
 
 typedef struct
 {
-    uint32_t value : GAME_BOARD_WIDTH;
+    unsigned int value : GAME_BOARD_WIDTH;
 } row_t;
 
 typedef struct
@@ -44,10 +44,10 @@ void toggle_bit(GameState_t *state, coord_t bit_coord);
 
 int extract_bit(GameState_t *state, coord_t bit_coord);
 
-void updateState(GameState_t *state);
-
 void move_piece_right(GameState_t *state);
 
 void move_piece_left(GameState_t *state);
 
 void move_piece_down(GameState_t *state);
+
+void rotate_piece(GameState_t *state);

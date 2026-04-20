@@ -6,7 +6,7 @@
 // TODO: Add collisions of pieces together (might need some sort of game/board state manager)
 // TODO: Implement score tracking, timer, lines completed, and other game logic
 // TODO: Implement next shape render on the left side of the game board
-//TODO: I don't need to pass whole game state into each func, should pass sub struct in
+// TODO: I don't need to pass whole game state into each func, should pass sub struct in
 /**
  * The main function initializes the Tetris game, clears the screen, and sets up the initial state.
  * It then enters an infinite loop to handle user input and render the game visuals.
@@ -32,14 +32,14 @@ int main(int argc, char *argv[])
     // drawShapesTest();
 
     // Make array of pieces to randomly choose from for spawn.
-    Tetromino_t pieces[] = {{.type = O_SHAPE, .coords = {.p1 = {0, 0}, .p2 = {1, 0}, .p3 = {0, 1}, .p4 = {1, 1}}, .prev_coords = {0}, .height = 2, .width = 1},
-                            {.type = I_SHAPE, .coords = {.p1 = {0, 0}, .p2 = {0, 1}, .p3 = {0, 2}, .p4 = {0, 3}}, .prev_coords = {0}, .height = 4, .width = 1},
-                            {.type = S_SHAPE, .coords = {.p1 = {1, 0}, .p2 = {2, 0}, .p3 = {0, 1}, .p4 = {1, 1}}, .prev_coords = {0}, .height = 2, .width = 3},
-                            {.type = Z_SHAPE, .coords = {.p1 = {0, 0}, .p2 = {1, 0}, .p3 = {1, 1}, .p4 = {2, 1}}, .prev_coords = {0}, .height = 2, .width = 3},
-                            {.type = L_SHAPE, .coords = {.p1 = {0, 0}, .p2 = {0, 1}, .p3 = {0, 2}, .p4 = {1, 2}}, .prev_coords = {0}, .height = 3, .width = 2},
-                            {.type = J_SHAPE, .coords = {.p1 = {1, 0}, .p2 = {1, 1}, .p3 = {1, 2}, .p4 = {0, 2}}, .prev_coords = {0}, .height = 3, .width = 2},
-                            {.type = T_SHAPE, .coords = {.p1 = {0, 0}, .p2 = {1, 0}, .p3 = {2, 0}, .p4 = {1, 1}}, .prev_coords = {0}, .height = 2, .width = 3}};
-    gameState.active_piece = pieces[rand() % 7]; // Choose random piece to start.
+    Tetromino_t pieces[] = {{.type = O_SHAPE, .coords = {.p1 = {0, 0}, .p2 = {1, 0}, .p3 = {0, 1}, .p4 = {1, 1}}, .rotation_state = NORMAL, .prev_coords = {0}, .height = 2, .width = 1},
+                            {.type = I_SHAPE, .coords = {.p1 = {0, 0}, .p2 = {0, 1}, .p3 = {0, 2}, .p4 = {0, 3}}, .rotation_state = NORMAL, .prev_coords = {0}, .height = 4, .width = 1},
+                            {.type = S_SHAPE, .coords = {.p1 = {1, 0}, .p2 = {2, 0}, .p3 = {0, 1}, .p4 = {1, 1}}, .rotation_state = NORMAL, .prev_coords = {0}, .height = 2, .width = 3},
+                            {.type = Z_SHAPE, .coords = {.p1 = {0, 0}, .p2 = {1, 0}, .p3 = {1, 1}, .p4 = {2, 1}}, .rotation_state = NORMAL, .prev_coords = {0}, .height = 2, .width = 3},
+                            {.type = L_SHAPE, .coords = {.p1 = {0, 0}, .p2 = {0, 1}, .p3 = {0, 2}, .p4 = {1, 2}}, .rotation_state = NORMAL, .prev_coords = {0}, .height = 3, .width = 2},
+                            {.type = J_SHAPE, .coords = {.p1 = {1, 0}, .p2 = {1, 1}, .p3 = {1, 2}, .p4 = {0, 2}}, .rotation_state = NORMAL, .prev_coords = {0}, .height = 3, .width = 2},
+                            {.type = T_SHAPE, .coords = {.p1 = {0, 0}, .p2 = {1, 0}, .p3 = {2, 0}, .p4 = {1, 1}}, .rotation_state = NORMAL, .prev_coords = {0}, .height = 2, .width = 3}};
+    gameState.active_piece = pieces[1]; // Choose random piece to start.
 
     char input = 0;
     redraw_shape(&gameState); // Initial update of state for adding shape to bitboard
@@ -84,18 +84,22 @@ int main(int argc, char *argv[])
                 else if (input == 'w')
                 {
                     // rotate piece
-                    switch(gameState.active_piece.rotation_state)
+                    switch (gameState.active_piece.rotation_state)
                     {
-                        case NORMAL: // Rotate right
-                            break;
-                        case RIGHT: // Rotate Upside down
-                            break;
-                        case UPSIDE_DOWN: // Rotate left
-                            break;
-                        case LEFT: // Rotate back to normal
-                            break;
-                        default:
-                            break;
+                    case NORMAL: // Rotate right
+                        gameState.active_piece.prev_coords = gameState.active_piece.coords;
+                        rotate_piece(&gameState);
+                        redraw_shape(&gameState);
+                        gameState.active_piece.rotation_state = RIGHT;
+                        break;
+                    case RIGHT: // Rotate Upside down
+                        break;
+                    case UPSIDE_DOWN: // Rotate left
+                        break;
+                    case LEFT: // Rotate back to normal
+                        break;
+                    default:
+                        break;
                     };
                 }
             }

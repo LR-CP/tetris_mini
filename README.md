@@ -4,13 +4,7 @@ The goal of this project is to create a handheld device to play tetris on.
 
 ## Software
 
-I will program tetris from scratch in C and will create a user input interface I can adapt from keyboard inputs to joystick/button inputs.
-
-Going to copy the original tetris design by Alexey Pajitnov
-![tetris](https://media.cnn.com/api/v1/images/stellar/prod/191028124455-tetris-e60.jpg?q=w_1160,c_fill/f_webp)
-
-My version will looks something like this:  
-![gameplay](./gameplay.gif)
+Please refer to the [README.md](./tetris_game/README.md) in the `tetris_game/` folder
 
 ## Hardware
 
