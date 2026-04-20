@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
 
     // Make array of pieces to randomly choose from for spawn.
     Tetromino_t pieces[] = {{.type = O_SHAPE, .coords = {.p1 = {0, 0}, .p2 = {1, 0}, .p3 = {0, 1}, .p4 = {1, 1}}, .rotation_state = NORMAL, .prev_coords = {0}, .height = 2, .width = 1},
-                            {.type = I_SHAPE, .coords = {.p1 = {0, 0}, .p2 = {0, 1}, .p3 = {0, 2}, .p4 = {0, 3}}, .rotation_state = NORMAL, .prev_coords = {0}, .height = 4, .width = 1},
+                            {.type = I_SHAPE, .coords = {.p1 = {GAME_BOARD_WIDTH / 2, 0}, .p2 = {GAME_BOARD_WIDTH / 2, 1}, .p3 = {GAME_BOARD_WIDTH / 2, 2}, .p4 = {GAME_BOARD_WIDTH / 2, 3}}, .rotation_state = NORMAL, .prev_coords = {0}, .height = 4, .width = 1},
                             {.type = S_SHAPE, .coords = {.p1 = {1, 0}, .p2 = {2, 0}, .p3 = {0, 1}, .p4 = {1, 1}}, .rotation_state = NORMAL, .prev_coords = {0}, .height = 2, .width = 3},
                             {.type = Z_SHAPE, .coords = {.p1 = {0, 0}, .p2 = {1, 0}, .p3 = {1, 1}, .p4 = {2, 1}}, .rotation_state = NORMAL, .prev_coords = {0}, .height = 2, .width = 3},
                             {.type = L_SHAPE, .coords = {.p1 = {0, 0}, .p2 = {0, 1}, .p3 = {0, 2}, .p4 = {1, 2}}, .rotation_state = NORMAL, .prev_coords = {0}, .height = 3, .width = 2},
@@ -63,44 +63,30 @@ int main(int argc, char *argv[])
                 else if (input == 'a')
                 {
                     // move piece left
+                    printf("Left\n");
                     gameState.active_piece.prev_coords = gameState.active_piece.coords;
-                    move_piece_left(&gameState);
-                    redraw_shape(&gameState);
+                    move_piece_left(&gameState.active_piece.coords);
                 }
                 else if (input == 'd')
                 {
                     // move piece right
+                    printf("Right\n");
                     gameState.active_piece.prev_coords = gameState.active_piece.coords;
                     move_piece_right(&gameState);
-                    redraw_shape(&gameState);
                 }
                 else if (input == 's')
                 {
                     // move piece down faster
+                    printf("Down\n");
                     gameState.active_piece.prev_coords = gameState.active_piece.coords;
                     move_piece_down(&gameState);
-                    redraw_shape(&gameState);
                 }
                 else if (input == 'w')
                 {
                     // rotate piece
-                    switch (gameState.active_piece.rotation_state)
-                    {
-                    case NORMAL: // Rotate right
-                        gameState.active_piece.prev_coords = gameState.active_piece.coords;
-                        rotate_piece(&gameState);
-                        redraw_shape(&gameState);
-                        gameState.active_piece.rotation_state = RIGHT;
-                        break;
-                    case RIGHT: // Rotate Upside down
-                        break;
-                    case UPSIDE_DOWN: // Rotate left
-                        break;
-                    case LEFT: // Rotate back to normal
-                        break;
-                    default:
-                        break;
-                    };
+                    printf("Rotate\n");
+                    rotate_piece(&gameState.active_piece);
+                    redraw_shape(&gameState);
                 }
             }
         }

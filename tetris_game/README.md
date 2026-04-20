@@ -223,10 +223,14 @@ Rotating will be handled by rotating a Tetromino using its `p2` as the focal poi
 As mentioned in [coord](#coord), the Tetrominos consist of 4 coordinates, `p1`, `p2`, `p3`, and `p4`. 
 
 T-Shape will be rotated as follows:  
-![t-shape-rotation](./notes/t-shape_rotation.drawio.png)
 
-I-Shape will be rotated as folows:
+![t-shape-rotation](./notes/t-shape_rotation.drawio.png)
+  
+I-Shape will be rotated as follows:  
 ![i-shape-rotation](./notes/i-shape_rotation.drawio.png)
+
+S-Shape will be rotated as follows:  
+![s-shape-rotation](./notes/s-shape_rotation.drawio.png)
 
 
 ### Collisions

@@ -46,8 +46,10 @@ int extract_bit(GameState_t *state, coord_t bit_coord);
 
 void move_piece_right(GameState_t *state);
 
-void move_piece_left(GameState_t *state);
+void move_piece_left(coords_t *coords);
 
 void move_piece_down(GameState_t *state);
 
-void rotate_piece(GameState_t *state);
+void rotate_piece(Tetromino_t *piece);
+
+void _rotate_I_piece(Tetromino_t *piece);

@@ -76,17 +76,17 @@ void move_piece_right(GameState_t *state)
     }
 }
 
-void move_piece_left(GameState_t *state)
+void move_piece_left(coords_t *coords)
 {
-    if (state->active_piece.coords.p1.x > GAME_BOARD_WIDTH &&
-        state->active_piece.coords.p2.x > GAME_BOARD_WIDTH &&
-        state->active_piece.coords.p3.x > GAME_BOARD_WIDTH &&
-        state->active_piece.coords.p4.x > GAME_BOARD_WIDTH)
+    if (coords->p1.x >= 0 &&
+        coords->p2.x >= 0 &&
+        coords->p3.x >= 0 &&
+        coords->p4.x >= 0)
     {
-        state->active_piece.coords.p1.x--;
-        state->active_piece.coords.p2.x--;
-        state->active_piece.coords.p3.x--;
-        state->active_piece.coords.p4.x--;
+        coords->p1.x--;
+        coords->p2.x--;
+        coords->p3.x--;
+        coords->p4.x--;
     }
 }
 
@@ -104,28 +104,89 @@ void move_piece_down(GameState_t *state)
     }
 }
 
-void rotate_piece(GameState_t *state)
+void _rotate_I_piece(Tetromino_t *piece)
 {
-    switch (state->active_piece.type == O_SHAPE)
+    switch (piece->rotation_state)
     {
-    case O_SHAPE:
-        break;
-    case I_SHAPE:
+    case NORMAL: // Rotate to RIGHT state
         // P1 rotation
-        state->active_piece.coords.p1.x++;
-        state->active_piece.coords.p1.y++;
+        piece->coords.p1.x++;
+        piece->coords.p1.y++;
 
         // No change for P2 as it is focal point
 
         // P3 rotation
-        state->active_piece.coords.p3.x--;
-        state->active_piece.coords.p3.y--;
+        piece->coords.p3.x--;
+        piece->coords.p3.y--;
 
         // P4 rotation
-        state->active_piece.coords.p4.x -= 2;
-        state->active_piece.coords.p4.y -= 2;
+        piece->coords.p4.x -= 2;
+        piece->coords.p4.y -= 2;
+        piece->rotation_state = RIGHT;
+        break;
+    case RIGHT: // Rotate to UPSIDE_DOWN state
+        // P1 rotation
+        piece->coords.p1.x--;
+        piece->coords.p1.y++;
+
+        // No change for P2 as it is focal point
+
+        // P3 rotation
+        piece->coords.p3.x++;
+        piece->coords.p3.y--;
+
+        // P4 rotation
+        piece->coords.p4.x += 2;
+        piece->coords.p4.y -= 2;
+        piece->rotation_state = UPSIDE_DOWN;
+        break;
+    case UPSIDE_DOWN: // Rotate to LEFT state
+        // P1 rotation
+        piece->coords.p1.x--;
+        piece->coords.p1.y--;
+
+        // No change for P2 as it is focal point
+
+        // P3 rotation
+        piece->coords.p3.x++;
+        piece->coords.p3.y++;
+
+        // P4 rotation
+        piece->coords.p4.x += 2;
+        piece->coords.p4.y += 2;
+        piece->rotation_state = LEFT;
+        break;
+    case LEFT: // Rotate to NORMAL state
+        // P1 rotation
+        piece->coords.p1.x++;
+        piece->coords.p1.y--;
+
+        // No change for P2 as it is focal point
+
+        // P3 rotation
+        piece->coords.p3.x--;
+        piece->coords.p3.y++;
+
+        // P4 rotation
+        piece->coords.p4.x -= 2;
+        piece->coords.p4.y += 2;
+        piece->rotation_state = NORMAL;
+        break;
+    };
+}
+
+void rotate_piece(Tetromino_t *piece)
+{
+    piece->prev_coords = piece->coords;
+    switch (piece->type)
+    {
+    case O_SHAPE:
+        // No rotation needed for now.
+        break;
+    case I_SHAPE:
+        _rotate_I_piece(piece);
     case S_SHAPE:
-        
+
         break;
     default:
         break;
