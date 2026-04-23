@@ -39,7 +39,7 @@ int main(int argc, char *argv[])
                             {.type = L_SHAPE, .coords = {.p1 = {0, 0}, .p2 = {0, 1}, .p3 = {0, 2}, .p4 = {1, 2}}, .rotation_state = NORMAL, .prev_coords = {0}, .height = 3, .width = 2},
                             {.type = J_SHAPE, .coords = {.p1 = {1, 0}, .p2 = {1, 1}, .p3 = {1, 2}, .p4 = {0, 2}}, .rotation_state = NORMAL, .prev_coords = {0}, .height = 3, .width = 2},
                             {.type = T_SHAPE, .coords = {.p1 = {0, 0}, .p2 = {1, 0}, .p3 = {2, 0}, .p4 = {1, 1}}, .rotation_state = NORMAL, .prev_coords = {0}, .height = 2, .width = 3}};
-    gameState.active_piece = pieces[1]; // Choose random piece to start.
+    gameState.active_piece = pieces[2]; // Choose random piece to start.
 
     char input = 0;
     redraw_shape(&gameState); // Initial update of state for adding shape to bitboard
@@ -66,6 +66,7 @@ int main(int argc, char *argv[])
                     printf("Left\n");
                     gameState.active_piece.prev_coords = gameState.active_piece.coords;
                     move_piece_left(&gameState.active_piece.coords);
+                    redraw_shape(&gameState);
                 }
                 else if (input == 'd')
                 {
@@ -73,6 +74,7 @@ int main(int argc, char *argv[])
                     printf("Right\n");
                     gameState.active_piece.prev_coords = gameState.active_piece.coords;
                     move_piece_right(&gameState);
+                    redraw_shape(&gameState);
                 }
                 else if (input == 's')
                 {
@@ -80,6 +82,7 @@ int main(int argc, char *argv[])
                     printf("Down\n");
                     gameState.active_piece.prev_coords = gameState.active_piece.coords;
                     move_piece_down(&gameState);
+                    redraw_shape(&gameState);
                 }
                 else if (input == 'w')
                 {

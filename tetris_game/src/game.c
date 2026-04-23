@@ -9,7 +9,7 @@ void toggle_bit(GameState_t *state, coord_t bit_coord)
     return;
 }
 
-int extract_bit(GameState_t *state, coord_t bit_coord)
+BOOL_t extract_bit(GameState_t *state, coord_t bit_coord)
 {
     return (state->bitboard[bit_coord.y].value >> bit_coord.x) & 1;
 }
@@ -46,6 +46,10 @@ void increase_gravity(GameState_t *state)
     state->active_piece.coords.p4.y++; // Move piece down by incrementing the y coordinate
 }
 
+/**
+ * Should be helper function called in other move functions since it needs
+ * to be called after each change is made to a tetromino's coords.
+ */
 void redraw_shape(GameState_t *state)
 {
     // For redraws I only need to redraw first and last row
@@ -175,6 +179,77 @@ void _rotate_I_piece(Tetromino_t *piece)
     };
 }
 
+void _rotate_S_piece(Tetromino_t *piece)
+{
+    printf("Rotat S\n");
+    switch (piece->rotation_state)
+    {
+    case NORMAL: // Rotate to RIGHT state
+        // P1 rotation
+        piece->coords.p1.x--;
+        piece->coords.p1.y++;
+
+        // No change for P2 as it is focal point
+
+        // P3 rotation
+        piece->coords.p3.x--;
+        piece->coords.p3.y--;
+
+        // P4 rotation
+        piece->coords.p4.y -= 2;
+        piece->rotation_state = RIGHT;
+        break;
+    case RIGHT: // Rotate to UPSIDE_DOWN state
+        // P1 rotation
+        piece->coords.p1.x--;
+        piece->coords.p1.y++;
+
+        // No change for P2 as it is focal point
+
+        // P3 rotation
+        piece->coords.p3.x++;
+        piece->coords.p3.y--;
+
+        // P4 rotation
+        piece->coords.p4.x += 2;
+        piece->coords.p4.y -= 2;
+        piece->rotation_state = UPSIDE_DOWN;
+        break;
+    case UPSIDE_DOWN: // Rotate to LEFT state
+        // P1 rotation
+        piece->coords.p1.x--;
+        piece->coords.p1.y--;
+
+        // No change for P2 as it is focal point
+
+        // P3 rotation
+        piece->coords.p3.x++;
+        piece->coords.p3.y++;
+
+        // P4 rotation
+        piece->coords.p4.x += 2;
+        piece->coords.p4.y += 2;
+        piece->rotation_state = LEFT;
+        break;
+    case LEFT: // Rotate to NORMAL state
+        // P1 rotation
+        piece->coords.p1.x++;
+        piece->coords.p1.y--;
+
+        // No change for P2 as it is focal point
+
+        // P3 rotation
+        piece->coords.p3.x--;
+        piece->coords.p3.y++;
+
+        // P4 rotation
+        piece->coords.p4.x -= 2;
+        piece->coords.p4.y += 2;
+        piece->rotation_state = NORMAL;
+        break;
+    };
+}
+
 void rotate_piece(Tetromino_t *piece)
 {
     piece->prev_coords = piece->coords;
@@ -185,8 +260,9 @@ void rotate_piece(Tetromino_t *piece)
         break;
     case I_SHAPE:
         _rotate_I_piece(piece);
+        break;
     case S_SHAPE:
-
+        _rotate_S_piece(piece);
         break;
     default:
         break;
