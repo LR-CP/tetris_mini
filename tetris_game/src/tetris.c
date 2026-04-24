@@ -1,7 +1,7 @@
-#include "draw.h"
+#include "render.h"
 #include "terminal.h"
 #include "input.h"
-#include "game.h"
+#include "state.h"
 
 // TODO: Add collisions of pieces together (might need some sort of game/board state manager)
 // TODO: Implement score tracking, timer, lines completed, and other game logic
@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
     // Make array of pieces to randomly choose from for spawn.
     Tetromino_t pieces[] = {{.type = O_SHAPE, .coords = {.p1 = {0, 0}, .p2 = {1, 0}, .p3 = {0, 1}, .p4 = {1, 1}}, .rotation_state = NORMAL, .prev_coords = {0}, .height = 2, .width = 1},
                             {.type = I_SHAPE, .coords = {.p1 = {GAME_BOARD_WIDTH / 2, 0}, .p2 = {GAME_BOARD_WIDTH / 2, 1}, .p3 = {GAME_BOARD_WIDTH / 2, 2}, .p4 = {GAME_BOARD_WIDTH / 2, 3}}, .rotation_state = NORMAL, .prev_coords = {0}, .height = 4, .width = 1},
-                            {.type = S_SHAPE, .coords = {.p1 = {1, 0}, .p2 = {2, 0}, .p3 = {0, 1}, .p4 = {1, 1}}, .rotation_state = NORMAL, .prev_coords = {0}, .height = 2, .width = 3},
+                            {.type = S_SHAPE, .coords = {.p1 = {2, 0}, .p2 = {1, 0}, .p3 = {1, 1}, .p4 = {0, 1}}, .rotation_state = NORMAL, .prev_coords = {0}, .height = 2, .width = 3},
                             {.type = Z_SHAPE, .coords = {.p1 = {0, 0}, .p2 = {1, 0}, .p3 = {1, 1}, .p4 = {2, 1}}, .rotation_state = NORMAL, .prev_coords = {0}, .height = 2, .width = 3},
                             {.type = L_SHAPE, .coords = {.p1 = {0, 0}, .p2 = {0, 1}, .p3 = {0, 2}, .p4 = {1, 2}}, .rotation_state = NORMAL, .prev_coords = {0}, .height = 3, .width = 2},
                             {.type = J_SHAPE, .coords = {.p1 = {1, 0}, .p2 = {1, 1}, .p3 = {1, 2}, .p4 = {0, 2}}, .rotation_state = NORMAL, .prev_coords = {0}, .height = 3, .width = 2},
@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
     gameState.active_piece = pieces[2]; // Choose random piece to start.
 
     char input = 0;
-    redraw_shape(&gameState); // Initial update of state for adding shape to bitboard
+    _update_bitboard_bits(&gameState); // Initial update of state for adding shape to bitboard
 
     while (1) // Main game loop, press 'q' to quit
     {
@@ -64,32 +64,25 @@ int main(int argc, char *argv[])
                 {
                     // move piece left
                     printf("Left\n");
-                    gameState.active_piece.prev_coords = gameState.active_piece.coords;
-                    move_piece_left(&gameState.active_piece.coords);
-                    redraw_shape(&gameState);
+                    move_piece_left(&gameState);
                 }
                 else if (input == 'd')
                 {
                     // move piece right
                     printf("Right\n");
-                    gameState.active_piece.prev_coords = gameState.active_piece.coords;
                     move_piece_right(&gameState);
-                    redraw_shape(&gameState);
                 }
                 else if (input == 's')
                 {
                     // move piece down faster
                     printf("Down\n");
-                    gameState.active_piece.prev_coords = gameState.active_piece.coords;
                     move_piece_down(&gameState);
-                    redraw_shape(&gameState);
                 }
                 else if (input == 'w')
                 {
                     // rotate piece
                     printf("Rotate\n");
-                    rotate_piece(&gameState.active_piece);
-                    redraw_shape(&gameState);
+                    rotate_piece(&gameState);
                 }
             }
         }
@@ -102,7 +95,7 @@ int main(int argc, char *argv[])
         if (gameState.active_piece.coords.p4.y == GAME_BOARD_HEIGHT - 1) // Collision with bottom of board
         {
             gameState.active_piece = pieces[rand() % 7]; // Spawn new piece
-            redraw_shape(&gameState);
+            _update_bitboard_bits(&gameState);
             continue;
         }
 
@@ -112,7 +105,6 @@ int main(int argc, char *argv[])
             start_time = get_current_time_ms();
             gameState.active_piece.prev_coords = gameState.active_piece.coords;
             increase_gravity(&gameState);
-            redraw_shape(&gameState);
             sleep(1);
         }
     }

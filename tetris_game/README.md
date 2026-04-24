@@ -234,3 +234,7 @@ S-Shape will be rotated as follows:
 
 
 ### Collisions
+
+## Code
+The code layout will look like this:  
+![sw_design](./notes/sw_design.drawio.png)
