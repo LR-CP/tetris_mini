@@ -1,2 +1,3 @@
 # Exclude the binary
-debug/
+tetris_game/debug/
+tetris_game/docs/html

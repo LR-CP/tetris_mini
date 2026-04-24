@@ -1,6 +1,6 @@
 #include "render.h"
 
-void drawBoard(int curr_curser_line, int curr_cursor_column)
+void setup_board(int curr_curser_line, int curr_cursor_column)
 {
     set_cursor(curr_curser_line, curr_cursor_column);
     printf("FULL LINES: 0\n");

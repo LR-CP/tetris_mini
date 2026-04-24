@@ -2,6 +2,7 @@
 
 void increase_gravity(GameState_t *state)
 {
+    state->active_piece.prev_coords = state->active_piece.coords;
     state->active_piece.coords.p1.y++; // Move piece down by incrementing the y coordinate
     state->active_piece.coords.p2.y++; // Move piece down by incrementing the y coordinate
     state->active_piece.coords.p3.y++; // Move piece down by incrementing the y coordinate
@@ -196,7 +197,7 @@ void _rotate_S_piece(Tetromino_t *piece)
     };
 }
 
-//TODO: Implement this function
+// TODO: Implement this function
 void _rotate_Z_piece(Tetromino_t *piece)
 {
     printf("Rotate S\n");
@@ -265,7 +266,7 @@ void _rotate_Z_piece(Tetromino_t *piece)
     };
 }
 
-//TODO: Implement this function
+// TODO: Implement this function
 void _rotate_L_piece(Tetromino_t *piece)
 {
     printf("Rotate S\n");
@@ -334,7 +335,7 @@ void _rotate_L_piece(Tetromino_t *piece)
     };
 }
 
-//TODO: Implement this function
+// TODO: Implement this function
 void _rotate_J_piece(Tetromino_t *piece)
 {
     printf("Rotate S\n");
@@ -403,7 +404,7 @@ void _rotate_J_piece(Tetromino_t *piece)
     };
 }
 
-//TODO: Implement this function
+// TODO: Implement this function
 void _rotate_T_piece(Tetromino_t *piece)
 {
     printf("Rotate S\n");

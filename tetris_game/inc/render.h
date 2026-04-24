@@ -23,6 +23,11 @@
  * @param start_row The row to start drawing on
  * @param start_column The column to start drawing on
  */
-void drawBoard(int start_row, int start_column);
+void setup_board(int start_row, int start_column);
 
+/**
+ * Returns the current wall-clock time in milliseconds.
+ *
+ * @return The current time in milliseconds.
+ */
 long long get_current_time_ms();

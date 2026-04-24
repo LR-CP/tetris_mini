@@ -103,7 +103,6 @@ int main(int argc, char *argv[])
         if (get_current_time_ms() - start_time >= fall_time)
         {
             start_time = get_current_time_ms();
-            gameState.active_piece.prev_coords = gameState.active_piece.coords;
             increase_gravity(&gameState);
             sleep(1);
         }

@@ -8,6 +8,11 @@
 #define CLEAR "\033[2J"
 #define CURSOR_HOME "\033[H"
 
+/**
+ * Restores the terminal configuration captured before raw mode was enabled.
+ *
+ * @param original Pointer to the terminal settings to restore.
+ */
 void reset_terminal(struct termios *original);
 
 /**
