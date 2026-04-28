@@ -197,277 +197,193 @@ void _rotate_S_piece(Tetromino_t *piece)
     };
 }
 
-// TODO: Implement this function
 void _rotate_Z_piece(Tetromino_t *piece)
 {
-    printf("Rotate S\n");
     switch (piece->rotation_state)
     {
     case NORMAL: // Rotate to RIGHT state
-        // P1 rotation
-        piece->coords.p1.x--;
-        piece->coords.p1.y++;
+        piece->coords.p1.x++;
+        piece->coords.p1.y--;
 
-        // No change for P2 as it is focal point
-
-        // P3 rotation
         piece->coords.p3.x--;
         piece->coords.p3.y--;
 
-        // P4 rotation
-        piece->coords.p4.y -= 2;
+        piece->coords.p4.x -= 2;
         piece->rotation_state = RIGHT;
         break;
     case RIGHT: // Rotate to UPSIDE_DOWN state
-        // P1 rotation
-        piece->coords.p1.x--;
-        piece->coords.p1.y--;
-
-        // No change for P2 as it is focal point
-
-        // P3 rotation
-        piece->coords.p3.x++;
-        piece->coords.p3.y--;
-
-        // P4 rotation
-        piece->coords.p4.x += 2;
-        piece->rotation_state = UPSIDE_DOWN;
-        break;
-    case UPSIDE_DOWN: // Rotate to LEFT state
-        // P1 rotation
-        piece->coords.p1.x++;
-        piece->coords.p1.y--;
-
-        // No change for P2 as it is focal point
-
-        // P3 rotation
-        piece->coords.p3.x++;
-        piece->coords.p3.y++;
-
-        // P4 rotation
-        piece->coords.p4.y += 2;
-        piece->rotation_state = LEFT;
-        break;
-    case LEFT: // Rotate to NORMAL state
-        // P1 rotation
         piece->coords.p1.x++;
         piece->coords.p1.y++;
 
-        // No change for P2 as it is focal point
+        piece->coords.p3.x++;
+        piece->coords.p3.y--;
 
-        // P3 rotation
+        piece->coords.p4.y -= 2;
+        piece->rotation_state = UPSIDE_DOWN;
+        break;
+    case UPSIDE_DOWN: // Rotate to LEFT state
+        piece->coords.p1.x--;
+        piece->coords.p1.y++;
+
+        piece->coords.p3.x++;
+        piece->coords.p3.y++;
+
+        piece->coords.p4.x += 2;
+        piece->rotation_state = LEFT;
+        break;
+    case LEFT: // Rotate to NORMAL state
+        piece->coords.p1.x--;
+        piece->coords.p1.y--;
+
         piece->coords.p3.x--;
         piece->coords.p3.y++;
 
-        // P4 rotation
-        piece->coords.p4.x -= 2;
+        piece->coords.p4.y += 2;
         piece->rotation_state = NORMAL;
         break;
     };
 }
 
-// TODO: Implement this function
 void _rotate_L_piece(Tetromino_t *piece)
 {
-    printf("Rotate S\n");
     switch (piece->rotation_state)
     {
     case NORMAL: // Rotate to RIGHT state
-        // P1 rotation
-        piece->coords.p1.x--;
+        piece->coords.p1.x++;
         piece->coords.p1.y++;
 
-        // No change for P2 as it is focal point
-
-        // P3 rotation
         piece->coords.p3.x--;
         piece->coords.p3.y--;
 
-        // P4 rotation
-        piece->coords.p4.y -= 2;
+        piece->coords.p4.x -= 2;
         piece->rotation_state = RIGHT;
         break;
     case RIGHT: // Rotate to UPSIDE_DOWN state
-        // P1 rotation
         piece->coords.p1.x--;
-        piece->coords.p1.y--;
+        piece->coords.p1.y++;
 
-        // No change for P2 as it is focal point
-
-        // P3 rotation
         piece->coords.p3.x++;
         piece->coords.p3.y--;
 
-        // P4 rotation
-        piece->coords.p4.x += 2;
+        piece->coords.p4.y -= 2;
         piece->rotation_state = UPSIDE_DOWN;
         break;
     case UPSIDE_DOWN: // Rotate to LEFT state
-        // P1 rotation
-        piece->coords.p1.x++;
+        piece->coords.p1.x--;
         piece->coords.p1.y--;
 
-        // No change for P2 as it is focal point
-
-        // P3 rotation
         piece->coords.p3.x++;
         piece->coords.p3.y++;
 
-        // P4 rotation
-        piece->coords.p4.y += 2;
+        piece->coords.p4.x += 2;
         piece->rotation_state = LEFT;
         break;
     case LEFT: // Rotate to NORMAL state
-        // P1 rotation
         piece->coords.p1.x++;
-        piece->coords.p1.y++;
+        piece->coords.p1.y--;
 
-        // No change for P2 as it is focal point
-
-        // P3 rotation
         piece->coords.p3.x--;
         piece->coords.p3.y++;
 
-        // P4 rotation
-        piece->coords.p4.x -= 2;
+        piece->coords.p4.y += 2;
         piece->rotation_state = NORMAL;
         break;
     };
 }
 
-// TODO: Implement this function
 void _rotate_J_piece(Tetromino_t *piece)
 {
-    printf("Rotate S\n");
     switch (piece->rotation_state)
     {
     case NORMAL: // Rotate to RIGHT state
-        // P1 rotation
-        piece->coords.p1.x--;
+        piece->coords.p1.x++;
         piece->coords.p1.y++;
 
-        // No change for P2 as it is focal point
-
-        // P3 rotation
         piece->coords.p3.x--;
         piece->coords.p3.y--;
 
-        // P4 rotation
         piece->coords.p4.y -= 2;
         piece->rotation_state = RIGHT;
         break;
     case RIGHT: // Rotate to UPSIDE_DOWN state
-        // P1 rotation
         piece->coords.p1.x--;
-        piece->coords.p1.y--;
+        piece->coords.p1.y++;
 
-        // No change for P2 as it is focal point
-
-        // P3 rotation
         piece->coords.p3.x++;
         piece->coords.p3.y--;
 
-        // P4 rotation
         piece->coords.p4.x += 2;
         piece->rotation_state = UPSIDE_DOWN;
         break;
     case UPSIDE_DOWN: // Rotate to LEFT state
-        // P1 rotation
-        piece->coords.p1.x++;
+        piece->coords.p1.x--;
         piece->coords.p1.y--;
 
-        // No change for P2 as it is focal point
-
-        // P3 rotation
         piece->coords.p3.x++;
         piece->coords.p3.y++;
 
-        // P4 rotation
         piece->coords.p4.y += 2;
         piece->rotation_state = LEFT;
         break;
     case LEFT: // Rotate to NORMAL state
-        // P1 rotation
         piece->coords.p1.x++;
-        piece->coords.p1.y++;
+        piece->coords.p1.y--;
 
-        // No change for P2 as it is focal point
-
-        // P3 rotation
         piece->coords.p3.x--;
         piece->coords.p3.y++;
 
-        // P4 rotation
         piece->coords.p4.x -= 2;
         piece->rotation_state = NORMAL;
         break;
     };
 }
 
-// TODO: Implement this function
 void _rotate_T_piece(Tetromino_t *piece)
 {
-    printf("Rotate S\n");
     switch (piece->rotation_state)
     {
     case NORMAL: // Rotate to RIGHT state
-        // P1 rotation
-        piece->coords.p1.x--;
-        piece->coords.p1.y++;
+        piece->coords.p1.x++;
+        piece->coords.p1.y--;
 
-        // No change for P2 as it is focal point
-
-        // P3 rotation
         piece->coords.p3.x--;
-        piece->coords.p3.y--;
+        piece->coords.p3.y++;
 
-        // P4 rotation
-        piece->coords.p4.y -= 2;
+        piece->coords.p4.x--;
+        piece->coords.p4.y--;
         piece->rotation_state = RIGHT;
         break;
     case RIGHT: // Rotate to UPSIDE_DOWN state
-        // P1 rotation
-        piece->coords.p1.x--;
-        piece->coords.p1.y--;
-
-        // No change for P2 as it is focal point
-
-        // P3 rotation
-        piece->coords.p3.x++;
-        piece->coords.p3.y--;
-
-        // P4 rotation
-        piece->coords.p4.x += 2;
-        piece->rotation_state = UPSIDE_DOWN;
-        break;
-    case UPSIDE_DOWN: // Rotate to LEFT state
-        // P1 rotation
-        piece->coords.p1.x++;
-        piece->coords.p1.y--;
-
-        // No change for P2 as it is focal point
-
-        // P3 rotation
-        piece->coords.p3.x++;
-        piece->coords.p3.y++;
-
-        // P4 rotation
-        piece->coords.p4.y += 2;
-        piece->rotation_state = LEFT;
-        break;
-    case LEFT: // Rotate to NORMAL state
-        // P1 rotation
         piece->coords.p1.x++;
         piece->coords.p1.y++;
 
-        // No change for P2 as it is focal point
-
-        // P3 rotation
         piece->coords.p3.x--;
+        piece->coords.p3.y--;
+
+        piece->coords.p4.x++;
+        piece->coords.p4.y--;
+        piece->rotation_state = UPSIDE_DOWN;
+        break;
+    case UPSIDE_DOWN: // Rotate to LEFT state
+        piece->coords.p1.x--;
+        piece->coords.p1.y++;
+
+        piece->coords.p3.x++;
+        piece->coords.p3.y--;
+
+        piece->coords.p4.x++;
+        piece->coords.p4.y++;
+        piece->rotation_state = LEFT;
+        break;
+    case LEFT: // Rotate to NORMAL state
+        piece->coords.p1.x--;
+        piece->coords.p1.y--;
+
+        piece->coords.p3.x++;
         piece->coords.p3.y++;
 
-        // P4 rotation
-        piece->coords.p4.x -= 2;
+        piece->coords.p4.x--;
+        piece->coords.p4.y++;
         piece->rotation_state = NORMAL;
         break;
     };

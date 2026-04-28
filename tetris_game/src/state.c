@@ -47,13 +47,29 @@ void _update_bitboard_bits(GameState_t *state)
     // For redraws I only need to redraw first and last row
     // Clear old shape
     toggle_bit(state, state->active_piece.prev_coords.p1);
+    set_cursor(state->active_piece.prev_coords.p1.y + RENDER_BOARD_ORIGIN_Y, (state->active_piece.prev_coords.p1.x * 2) + RENDER_BOARD_ORIGIN_X);
+    state->active_piece.prev_coords.p1.x %2 == 0 ? printf("  \n") : printf(" .\n");
     toggle_bit(state, state->active_piece.prev_coords.p2);
+    set_cursor(state->active_piece.prev_coords.p2.y + RENDER_BOARD_ORIGIN_Y, (state->active_piece.prev_coords.p2.x * 2) + RENDER_BOARD_ORIGIN_X);
+    state->active_piece.prev_coords.p1.x %2 == 0 ? printf("  \n") : printf(" .\n");
     toggle_bit(state, state->active_piece.prev_coords.p3);
+    set_cursor(state->active_piece.prev_coords.p3.y + RENDER_BOARD_ORIGIN_Y, (state->active_piece.prev_coords.p3.x * 2) + RENDER_BOARD_ORIGIN_X);
+    state->active_piece.prev_coords.p1.x %2 == 0 ? printf("  \n") : printf(" .\n");
     toggle_bit(state, state->active_piece.prev_coords.p4);
+    set_cursor(state->active_piece.prev_coords.p4.y + RENDER_BOARD_ORIGIN_Y, (state->active_piece.prev_coords.p4.x * 2) + RENDER_BOARD_ORIGIN_X);
+    state->active_piece.prev_coords.p1.x %2 == 0 ? printf("  \n") : printf(" .\n");
 
     // Draw new shape
     toggle_bit(state, state->active_piece.coords.p1);
+    set_cursor(state->active_piece.coords.p1.y + RENDER_BOARD_ORIGIN_Y, (state->active_piece.coords.p1.x * 2) + RENDER_BOARD_ORIGIN_X);
+    printf(SHAPE);
     toggle_bit(state, state->active_piece.coords.p2);
+    set_cursor(state->active_piece.coords.p2.y + RENDER_BOARD_ORIGIN_Y, (state->active_piece.coords.p2.x * 2) + RENDER_BOARD_ORIGIN_X);
+    printf(SHAPE);
     toggle_bit(state, state->active_piece.coords.p3);
+    set_cursor(state->active_piece.coords.p3.y + RENDER_BOARD_ORIGIN_Y, (state->active_piece.coords.p3.x * 2) + RENDER_BOARD_ORIGIN_X);
+    printf(SHAPE);
     toggle_bit(state, state->active_piece.coords.p4);
+    set_cursor(state->active_piece.coords.p4.y + RENDER_BOARD_ORIGIN_Y, (state->active_piece.coords.p4.x * 2) + RENDER_BOARD_ORIGIN_X);
+    printf(SHAPE);
 }

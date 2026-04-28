@@ -22,14 +22,12 @@ int main(int argc, char *argv[])
 
     GameState_t gameState = {0}; // Clear out struct to all 0's (for array mainly)
 
-    // clear_screen();
-    // cursor_home();
+    clear_screen();
+    cursor_home();
     // show_cursor();
+    hide_cursor();
 
-    // drawBoard(start_row, start_column);
-
-    // hide_cursor();
-    // drawShapesTest();
+    setup_ui();
 
     // Make array of pieces to randomly choose from for spawn.
     Tetromino_t pieces[] = {{.type = O_SHAPE, .coords = {.p1 = {0, 0}, .p2 = {1, 0}, .p3 = {0, 1}, .p4 = {1, 1}}, .rotation_state = NORMAL, .prev_coords = {0}, .height = 2, .width = 1},
@@ -46,8 +44,8 @@ int main(int argc, char *argv[])
 
     while (1) // Main game loop, press 'q' to quit
     {
-        clear_screen();
-        print_state_board(&gameState);
+        // clear_screen();
+        // print_state_board(&gameState);
 
         // Listen for keypress
         if (keyboard_input())
@@ -63,25 +61,25 @@ int main(int argc, char *argv[])
                 else if (input == 'a')
                 {
                     // move piece left
-                    printf("Left\n");
+                    // printf("Left\n");
                     move_piece_left(&gameState);
                 }
                 else if (input == 'd')
                 {
                     // move piece right
-                    printf("Right\n");
+                    // printf("Right\n");
                     move_piece_right(&gameState);
                 }
                 else if (input == 's')
                 {
                     // move piece down faster
-                    printf("Down\n");
+                    // printf("Down\n");
                     move_piece_down(&gameState);
                 }
                 else if (input == 'w')
                 {
                     // rotate piece
-                    printf("Rotate\n");
+                    // printf("Rotate\n");
                     rotate_piece(&gameState);
                 }
             }
@@ -104,7 +102,7 @@ int main(int argc, char *argv[])
         {
             start_time = get_current_time_ms();
             increase_gravity(&gameState);
-            sleep(1);
+            // sleep(1);
         }
     }
 

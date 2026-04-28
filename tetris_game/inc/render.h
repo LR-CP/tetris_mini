@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <sys/time.h>
+#include <string.h>
 #include "terminal.h"
 
 #define FULL_BOARD_WIDTH 24
@@ -13,17 +14,17 @@
 #define SHAPE_SPAWN_X ((FULL_BOARD_WIDTH / 2) + BOARD_LEFT_WALL_COORD) // As of now its 64
 #define SHAPE_SPAWN_Y BOARD_TOP_WALL_COORD
 
+#define RENDER_BOARD_ORIGIN_X 27 // X Coordinate of the rendered board
+#define RENDER_BOARD_ORIGIN_Y 0 // Y Coordinate of the rendered board
+
 #pragma once
 
-#define SHAPE "[]"
+#define SHAPE "[]\n"
 
 /**
  * Draw the board and the main UI
- * 
- * @param start_row The row to start drawing on
- * @param start_column The column to start drawing on
  */
-void setup_board(int start_row, int start_column);
+void setup_ui();
 
 /**
  * Returns the current wall-clock time in milliseconds.
