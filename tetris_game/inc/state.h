@@ -118,7 +118,7 @@ void _printb(int line, int n);
  *
  * @param state Pointer to the game state to update.
  */
-void _update_bitboard_bits(GameState_t *state);
+void update_bitboard_bits(GameState_t *state);
 
 /**
  * Toggles the bit at the provided board coordinate.

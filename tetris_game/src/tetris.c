@@ -16,7 +16,7 @@ int main(int argc, char *argv[])
     int start_row = 5;
     int start_column = 25;
     long long start_time = get_current_time_ms();
-    long long fall_time = 100;
+    long long fall_time = 500;
     struct termios orig_t = set_raw_mode();
     srand(time(NULL));
 
@@ -24,7 +24,6 @@ int main(int argc, char *argv[])
 
     clear_screen();
     cursor_home();
-    // show_cursor();
     hide_cursor();
 
     setup_ui();
@@ -40,7 +39,7 @@ int main(int argc, char *argv[])
     gameState.active_piece = pieces[2]; // Choose random piece to start.
 
     char input = 0;
-    _update_bitboard_bits(&gameState); // Initial update of state for adding shape to bitboard
+    update_bitboard_bits(&gameState); // Initial update of state for adding shape to bitboard
 
     while (1) // Main game loop, press 'q' to quit
     {
@@ -90,11 +89,13 @@ int main(int argc, char *argv[])
         }
 
         // Check collisions (should be another func called checkCollisions so it can be called in keypress logic)
-        if (gameState.active_piece.coords.p4.y == GAME_BOARD_HEIGHT - 1) // Collision with bottom of board
+        if (gameState.active_piece.coords.p1.y == GAME_BOARD_HEIGHT ||
+            gameState.active_piece.coords.p2.y == GAME_BOARD_HEIGHT ||
+            gameState.active_piece.coords.p3.y == GAME_BOARD_HEIGHT ||
+            gameState.active_piece.coords.p4.y == GAME_BOARD_HEIGHT)
         {
             gameState.active_piece = pieces[rand() % 7]; // Spawn new piece
-            _update_bitboard_bits(&gameState);
-            continue;
+            update_bitboard_bits(&gameState);
         }
 
         // Move the piece down 1 block per second (gravity)
@@ -102,13 +103,12 @@ int main(int argc, char *argv[])
         {
             start_time = get_current_time_ms();
             increase_gravity(&gameState);
-            // sleep(1);
         }
     }
 
-    // show_cursor();
-    // clear_screen();
-    // reset_terminal(&orig_t);
+    show_cursor();
+    clear_screen();
+    reset_terminal(&orig_t);
 
     return 0;
 }

@@ -1,14 +1,22 @@
 #include "state.h"
 
+// Need to detect piece on the bottom of the shape (based on current rotation state) and then check if that pieces y coord++ == 1
 void increase_gravity(GameState_t *state)
 {
     state->active_piece.prev_coords = state->active_piece.coords;
+
+    // if (extract_bit(state, (coord_t){state->active_piece.coords.p1.x, state->active_piece.coords.p1.y++}) == FALSE &&
+    //     extract_bit(state, (coord_t){state->active_piece.coords.p2.x, state->active_piece.coords.p2.y++}) == FALSE &&
+    //     extract_bit(state, (coord_t){state->active_piece.coords.p3.x, state->active_piece.coords.p3.y++}) == FALSE &&
+    //     extract_bit(state, (coord_t){state->active_piece.coords.p4.x, state->active_piece.coords.p4.y++}) == FALSE)
+    // {
     state->active_piece.coords.p1.y++; // Move piece down by incrementing the y coordinate
     state->active_piece.coords.p2.y++; // Move piece down by incrementing the y coordinate
     state->active_piece.coords.p3.y++; // Move piece down by incrementing the y coordinate
     state->active_piece.coords.p4.y++; // Move piece down by incrementing the y coordinate
+    // }
 
-    _update_bitboard_bits(state);
+    update_bitboard_bits(state);
 }
 
 void move_piece_right(GameState_t *state)
@@ -24,23 +32,23 @@ void move_piece_right(GameState_t *state)
         state->active_piece.coords.p3.x++;
         state->active_piece.coords.p4.x++;
     }
-    _update_bitboard_bits(state);
+    update_bitboard_bits(state);
 }
 
 void move_piece_left(GameState_t *state)
 {
     state->active_piece.prev_coords = state->active_piece.coords;
-    if (state->active_piece.coords.p1.x >= 0 &&
-        state->active_piece.coords.p2.x >= 0 &&
-        state->active_piece.coords.p3.x >= 0 &&
-        state->active_piece.coords.p4.x >= 0)
+    if (state->active_piece.coords.p1.x > 0 &&
+        state->active_piece.coords.p2.x > 0 &&
+        state->active_piece.coords.p3.x > 0 &&
+        state->active_piece.coords.p4.x > 0)
     {
         state->active_piece.coords.p1.x--;
         state->active_piece.coords.p2.x--;
         state->active_piece.coords.p3.x--;
         state->active_piece.coords.p4.x--;
     }
-    _update_bitboard_bits(state);
+    update_bitboard_bits(state);
 }
 
 void move_piece_down(GameState_t *state)
@@ -56,7 +64,7 @@ void move_piece_down(GameState_t *state)
         state->active_piece.coords.p3.y++;
         state->active_piece.coords.p4.y++;
     }
-    _update_bitboard_bits(state);
+    update_bitboard_bits(state);
 }
 
 void _rotate_I_piece(Tetromino_t *piece)
@@ -391,6 +399,7 @@ void _rotate_T_piece(Tetromino_t *piece)
 
 void rotate_piece(GameState_t *state)
 {
+    // TODO: If rotation causes piece to move out of bounds, it is refused
     state->active_piece.prev_coords = state->active_piece.coords;
     switch (state->active_piece.type)
     {
@@ -419,5 +428,5 @@ void rotate_piece(GameState_t *state)
         break;
     };
 
-    _update_bitboard_bits(state);
+    update_bitboard_bits(state);
 }

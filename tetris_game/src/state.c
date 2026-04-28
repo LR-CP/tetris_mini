@@ -42,9 +42,8 @@ void print_state_board(GameState_t *state)
  * Should be helper function called in other move functions since it needs
  * to be called after each change is made to a tetromino's coords.
  */
-void _update_bitboard_bits(GameState_t *state)
+void update_bitboard_bits(GameState_t *state)
 {
-    // For redraws I only need to redraw first and last row
     // Clear old shape
     toggle_bit(state, state->active_piece.prev_coords.p1);
     set_cursor(state->active_piece.prev_coords.p1.y + RENDER_BOARD_ORIGIN_Y, (state->active_piece.prev_coords.p1.x * 2) + RENDER_BOARD_ORIGIN_X);

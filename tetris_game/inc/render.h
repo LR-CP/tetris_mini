@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <sys/time.h>
-#include <string.h>
 #include "terminal.h"
 
 #define FULL_BOARD_WIDTH 24
