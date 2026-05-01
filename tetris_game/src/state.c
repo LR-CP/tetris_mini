@@ -14,6 +14,51 @@ BOOL_t extract_bit(GameState_t *state, coord_t bit_coord)
     return (state->bitboard[bit_coord.y].value >> bit_coord.x) & 1;
 }
 
+/**
+ * Removes the active piece from the board using the coordinates saved in
+ * `prev_coords` by the movement logic.
+ */
+void clear_active_piece(GameState_t *state)
+{
+    toggle_bit(state, state->active_piece.prev_coords.p1);
+    set_cursor(state->active_piece.prev_coords.p1.y + RENDER_BOARD_ORIGIN_Y, (state->active_piece.prev_coords.p1.x * 2) + RENDER_BOARD_ORIGIN_X);
+    printf("  ");
+
+    toggle_bit(state, state->active_piece.prev_coords.p2);
+    set_cursor(state->active_piece.prev_coords.p2.y + RENDER_BOARD_ORIGIN_Y, (state->active_piece.prev_coords.p2.x * 2) + RENDER_BOARD_ORIGIN_X);
+    printf("  ");
+
+    toggle_bit(state, state->active_piece.prev_coords.p3);
+    set_cursor(state->active_piece.prev_coords.p3.y + RENDER_BOARD_ORIGIN_Y, (state->active_piece.prev_coords.p3.x * 2) + RENDER_BOARD_ORIGIN_X);
+    printf("  ");
+
+    toggle_bit(state, state->active_piece.prev_coords.p4);
+    set_cursor(state->active_piece.prev_coords.p4.y + RENDER_BOARD_ORIGIN_Y, (state->active_piece.prev_coords.p4.x * 2) + RENDER_BOARD_ORIGIN_X);
+    printf("  ");
+}
+
+/**
+ * Draws the active piece at its current coordinates.
+ */
+void draw_active_piece(GameState_t *state)
+{
+    toggle_bit(state, state->active_piece.coords.p1);
+    set_cursor(state->active_piece.coords.p1.y + RENDER_BOARD_ORIGIN_Y, (state->active_piece.coords.p1.x * 2) + RENDER_BOARD_ORIGIN_X);
+    printf(SHAPE);
+
+    toggle_bit(state, state->active_piece.coords.p2);
+    set_cursor(state->active_piece.coords.p2.y + RENDER_BOARD_ORIGIN_Y, (state->active_piece.coords.p2.x * 2) + RENDER_BOARD_ORIGIN_X);
+    printf(SHAPE);
+
+    toggle_bit(state, state->active_piece.coords.p3);
+    set_cursor(state->active_piece.coords.p3.y + RENDER_BOARD_ORIGIN_Y, (state->active_piece.coords.p3.x * 2) + RENDER_BOARD_ORIGIN_X);
+    printf(SHAPE);
+
+    toggle_bit(state, state->active_piece.coords.p4);
+    set_cursor(state->active_piece.coords.p4.y + RENDER_BOARD_ORIGIN_Y, (state->active_piece.coords.p4.x * 2) + RENDER_BOARD_ORIGIN_X);
+    printf(SHAPE);
+}
+
 void _printb(int line, int n)
 {
     // Iterate through all 32 bits of a standard integer
@@ -44,34 +89,6 @@ void print_state_board(GameState_t *state)
  */
 void update_bitboard_bits(GameState_t *state)
 {
-    // Clear old shape
-    toggle_bit(state, state->active_piece.prev_coords.p1);
-    set_cursor(state->active_piece.prev_coords.p1.y + RENDER_BOARD_ORIGIN_Y, (state->active_piece.prev_coords.p1.x * 2) + RENDER_BOARD_ORIGIN_X);
-    state->active_piece.prev_coords.p1.x %2 == 0 ? printf("  \n") : printf(" .\n");
-    toggle_bit(state, state->active_piece.prev_coords.p2);
-    set_cursor(state->active_piece.prev_coords.p2.y + RENDER_BOARD_ORIGIN_Y, (state->active_piece.prev_coords.p2.x * 2) + RENDER_BOARD_ORIGIN_X);
-    state->active_piece.prev_coords.p1.x %2 == 0 ? printf("  \n") : printf(" .\n");
-    toggle_bit(state, state->active_piece.prev_coords.p3);
-    set_cursor(state->active_piece.prev_coords.p3.y + RENDER_BOARD_ORIGIN_Y, (state->active_piece.prev_coords.p3.x * 2) + RENDER_BOARD_ORIGIN_X);
-    state->active_piece.prev_coords.p1.x %2 == 0 ? printf("  \n") : printf(" .\n");
-    toggle_bit(state, state->active_piece.prev_coords.p4);
-    set_cursor(state->active_piece.prev_coords.p4.y + RENDER_BOARD_ORIGIN_Y, (state->active_piece.prev_coords.p4.x * 2) + RENDER_BOARD_ORIGIN_X);
-    state->active_piece.prev_coords.p1.x %2 == 0 ? printf("  \n") : printf(" .\n");
-
-    if (check_collision(state) == TRUE)
-        return;
-
-    // Draw new shape
-    toggle_bit(state, state->active_piece.coords.p1);
-    set_cursor(state->active_piece.coords.p1.y + RENDER_BOARD_ORIGIN_Y, (state->active_piece.coords.p1.x * 2) + RENDER_BOARD_ORIGIN_X);
-    printf(SHAPE);
-    toggle_bit(state, state->active_piece.coords.p2);
-    set_cursor(state->active_piece.coords.p2.y + RENDER_BOARD_ORIGIN_Y, (state->active_piece.coords.p2.x * 2) + RENDER_BOARD_ORIGIN_X);
-    printf(SHAPE);
-    toggle_bit(state, state->active_piece.coords.p3);
-    set_cursor(state->active_piece.coords.p3.y + RENDER_BOARD_ORIGIN_Y, (state->active_piece.coords.p3.x * 2) + RENDER_BOARD_ORIGIN_X);
-    printf(SHAPE);
-    toggle_bit(state, state->active_piece.coords.p4);
-    set_cursor(state->active_piece.coords.p4.y + RENDER_BOARD_ORIGIN_Y, (state->active_piece.coords.p4.x * 2) + RENDER_BOARD_ORIGIN_X);
-    printf(SHAPE);
+    clear_active_piece(state);
+    draw_active_piece(state);
 }

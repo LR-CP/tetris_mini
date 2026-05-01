@@ -138,6 +138,21 @@ void toggle_bit(GameState_t *state, coord_t bit_coord);
 BOOL_t extract_bit(GameState_t *state, coord_t bit_coord);
 
 /**
+ * Removes the active piece from the bitboard and clears its rendered cells
+ * using the coordinates stored in `prev_coords`.
+ *
+ * @param state Pointer to the game state containing the active piece.
+ */
+void clear_active_piece(GameState_t *state);
+
+/**
+ * Draws the active piece into the bitboard and renders its current cells.
+ *
+ * @param state Pointer to the game state containing the active piece.
+ */
+void draw_active_piece(GameState_t *state);
+
+/**
  * Shape State Functions
  */
 /**

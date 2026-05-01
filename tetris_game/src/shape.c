@@ -36,6 +36,7 @@ BOOL_t check_collision(GameState_t *state)
 void move_piece_right(GameState_t *state)
 {
     state->active_piece.prev_coords = state->active_piece.coords;
+    clear_active_piece(state);
     if (state->active_piece.coords.p1.x < GAME_BOARD_WIDTH - 1 &&
         state->active_piece.coords.p2.x < GAME_BOARD_WIDTH - 1 &&
         state->active_piece.coords.p3.x < GAME_BOARD_WIDTH - 1 &&
@@ -46,12 +47,21 @@ void move_piece_right(GameState_t *state)
         state->active_piece.coords.p3.x++;
         state->active_piece.coords.p4.x++;
     }
-    update_bitboard_bits(state);
+    if (check_collision(state) == FALSE)
+    {
+        draw_active_piece(state);
+    }
+    else
+    {
+        state->active_piece.coords = state->active_piece.prev_coords;
+        draw_active_piece(state);
+    }
 }
 
 void move_piece_left(GameState_t *state)
 {
     state->active_piece.prev_coords = state->active_piece.coords;
+    clear_active_piece(state);
     if (state->active_piece.coords.p1.x > 0 &&
         state->active_piece.coords.p2.x > 0 &&
         state->active_piece.coords.p3.x > 0 &&
@@ -62,12 +72,21 @@ void move_piece_left(GameState_t *state)
         state->active_piece.coords.p3.x--;
         state->active_piece.coords.p4.x--;
     }
-    update_bitboard_bits(state);
+    if (check_collision(state) == FALSE)
+    {
+        draw_active_piece(state);
+    }
+    else
+    {
+        state->active_piece.coords = state->active_piece.prev_coords;
+        draw_active_piece(state);
+    }
 }
 
 void move_piece_down(GameState_t *state)
 {
     state->active_piece.prev_coords = state->active_piece.coords;
+    clear_active_piece(state);
     if (state->active_piece.coords.p1.y < GAME_BOARD_HEIGHT - 1 &&
         state->active_piece.coords.p2.y < GAME_BOARD_HEIGHT - 1 &&
         state->active_piece.coords.p3.y < GAME_BOARD_HEIGHT - 1 &&
@@ -78,7 +97,15 @@ void move_piece_down(GameState_t *state)
         state->active_piece.coords.p3.y++;
         state->active_piece.coords.p4.y++;
     }
-    update_bitboard_bits(state);
+    if (check_collision(state) == FALSE)
+    {
+        draw_active_piece(state);
+    }
+    else
+    {
+        state->active_piece.coords = state->active_piece.prev_coords;
+        draw_active_piece(state);
+    }
 }
 
 void _rotate_I_piece(Tetromino_t *piece)
