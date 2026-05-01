@@ -1,33 +1,55 @@
 #include "state.h"
 
-// Need to detect piece on the bottom of the shape (based on current rotation state) and then check if that pieces y coord++ == 1
-void increase_gravity(GameState_t *state)
+/**
+ * Checks whether any block of the active piece is already resting on the
+ * bottom edge of the board.
+ *
+ * @param state Pointer to the game state containing the active piece.
+ * @return TRUE if any block is on the bottom row; otherwise FALSE.
+ */
+static BOOL_t active_piece_on_bottom(GameState_t *state)
 {
-    state->active_piece.prev_coords = state->active_piece.coords;
+    return state->active_piece.coords.p1.y >= GAME_BOARD_HEIGHT - 1 ||
+           state->active_piece.coords.p2.y >= GAME_BOARD_HEIGHT - 1 ||
+           state->active_piece.coords.p3.y >= GAME_BOARD_HEIGHT - 1 ||
+           state->active_piece.coords.p4.y >= GAME_BOARD_HEIGHT - 1;
+}
 
-    // if (extract_bit(state, (coord_t){state->active_piece.coords.p1.x, state->active_piece.coords.p1.y++}) == FALSE &&
-    //     extract_bit(state, (coord_t){state->active_piece.coords.p2.x, state->active_piece.coords.p2.y++}) == FALSE &&
-    //     extract_bit(state, (coord_t){state->active_piece.coords.p3.x, state->active_piece.coords.p3.y++}) == FALSE &&
-    //     extract_bit(state, (coord_t){state->active_piece.coords.p4.x, state->active_piece.coords.p4.y++}) == FALSE)
-    // {
+// Need to detect piece on the bottom of the shape (based on current rotation state) and then check if that pieces y coord++ == 1
+BOOL_t increase_gravity(GameState_t *state)
+{
+    if (active_piece_on_bottom(state) == TRUE)
+    {
+        return TRUE;
+    }
+
+    state->active_piece.prev_coords = state->active_piece.coords;
+    clear_active_piece(state);
     state->active_piece.coords.p1.y++; // Move piece down by incrementing the y coordinate
     state->active_piece.coords.p2.y++; // Move piece down by incrementing the y coordinate
     state->active_piece.coords.p3.y++; // Move piece down by incrementing the y coordinate
     state->active_piece.coords.p4.y++; // Move piece down by incrementing the y coordinate
-    // }
+    if (check_collision(state) == FALSE)
+    {
+        draw_active_piece(state);
+    }
+    else
+    {
+        state->active_piece.coords = state->active_piece.prev_coords;
+        draw_active_piece(state);
+        return TRUE;
+    }
 
-    update_bitboard_bits(state);
+    return FALSE;
 }
 
 BOOL_t check_collision(GameState_t *state)
 {
-    printf("%d, %d, %d, %d\n", extract_bit(state, state->active_piece.coords.p1), extract_bit(state, state->active_piece.coords.p2), extract_bit(state, state->active_piece.coords.p3), extract_bit(state, state->active_piece.coords.p4));
     if (extract_bit(state, state->active_piece.coords.p1) == TRUE ||
         extract_bit(state, state->active_piece.coords.p2) == TRUE ||
         extract_bit(state, state->active_piece.coords.p3) == TRUE ||
         extract_bit(state, state->active_piece.coords.p4) == TRUE)
     {
-        printf("COLLISION\n");
         return TRUE;
     }
     return FALSE;
@@ -83,8 +105,13 @@ void move_piece_left(GameState_t *state)
     }
 }
 
-void move_piece_down(GameState_t *state)
+BOOL_t move_piece_down(GameState_t *state)
 {
+    if (active_piece_on_bottom(state) == TRUE)
+    {
+        return TRUE;
+    }
+
     state->active_piece.prev_coords = state->active_piece.coords;
     clear_active_piece(state);
     if (state->active_piece.coords.p1.y < GAME_BOARD_HEIGHT - 1 &&
@@ -100,12 +127,19 @@ void move_piece_down(GameState_t *state)
     if (check_collision(state) == FALSE)
     {
         draw_active_piece(state);
+        if (active_piece_on_bottom(state) == TRUE)
+        {
+            return TRUE;
+        }
     }
     else
     {
         state->active_piece.coords = state->active_piece.prev_coords;
         draw_active_piece(state);
+        return TRUE;
     }
+
+    return FALSE;
 }
 
 void _rotate_I_piece(Tetromino_t *piece)

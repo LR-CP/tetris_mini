@@ -3,6 +3,21 @@
 #include "input.h"
 #include "state.h"
 
+/**
+ * Spawns a random tetromino template from the provided piece pool and draws it
+ * as the new active piece.
+ *
+ * @param state Pointer to the game state receiving the new active piece.
+ * @param pieces Array of piece templates used for spawning.
+ * @param piece_count Number of entries available in `pieces`.
+ */
+static void spawn_random_piece(GameState_t *state, Tetromino_t pieces[], int piece_count)
+{
+    state->active_piece = pieces[rand() % piece_count];
+    state->active_piece.prev_coords = state->active_piece.coords;
+    draw_active_piece(state);
+}
+
 // TODO: Add collisions of pieces together (might need some sort of game/board state manager)
 // TODO: Implement score tracking, timer, lines completed, and other game logic
 // TODO: Implement next shape render on the left side of the game board
@@ -37,9 +52,10 @@ int main(int argc, char *argv[])
                             {.type = J_SHAPE, .coords = {.p1 = {1, 0}, .p2 = {1, 1}, .p3 = {1, 2}, .p4 = {0, 2}}, .rotation_state = NORMAL, .prev_coords = {0}, .height = 3, .width = 2},
                             {.type = T_SHAPE, .coords = {.p1 = {0, 0}, .p2 = {1, 0}, .p3 = {2, 0}, .p4 = {1, 1}}, .rotation_state = NORMAL, .prev_coords = {0}, .height = 2, .width = 3}};
     gameState.active_piece = pieces[2]; // Choose random piece to start.
+    gameState.active_piece.prev_coords = gameState.active_piece.coords;
 
     char input = 0;
-    update_bitboard_bits(&gameState); // Initial update of state for adding shape to bitboard
+    draw_active_piece(&gameState); // Initial update of state for adding shape to bitboard
 
     while (1) // Main game loop, press 'q' to quit
     {
@@ -73,7 +89,10 @@ int main(int argc, char *argv[])
                 {
                     // move piece down faster
                     // printf("Down\n");
-                    move_piece_down(&gameState);
+                    if (move_piece_down(&gameState) == TRUE)
+                    {
+                        spawn_random_piece(&gameState, pieces, 7);
+                    }
                 }
                 else if (input == 'w')
                 {
@@ -88,21 +107,14 @@ int main(int argc, char *argv[])
             input = 0; // No input
         }
 
-        // Check collisions (should be another func called checkCollisions so it can be called in keypress logic)
-        if (gameState.active_piece.coords.p1.y == GAME_BOARD_HEIGHT ||
-            gameState.active_piece.coords.p2.y == GAME_BOARD_HEIGHT ||
-            gameState.active_piece.coords.p3.y == GAME_BOARD_HEIGHT ||
-            gameState.active_piece.coords.p4.y == GAME_BOARD_HEIGHT)
-        {
-            gameState.active_piece = pieces[rand() % 7]; // Spawn new piece
-            update_bitboard_bits(&gameState);
-        }
-
         // Move the piece down 1 block per second (gravity)
         if (get_current_time_ms() - start_time >= fall_time)
         {
             start_time = get_current_time_ms();
-            increase_gravity(&gameState);
+            if (increase_gravity(&gameState) == TRUE)
+            {
+                spawn_random_piece(&gameState, pieces, 7);
+            }
         }
     }
 

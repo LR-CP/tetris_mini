@@ -3,7 +3,7 @@
 #include "terminal.h"
 
 #define FULL_BOARD_WIDTH 24
-#define FULL_BOARD_HEIGHT 21
+#define FULL_BOARD_HEIGHT 20
 
 #define BOARD_LEFT_WALL_COORD 52
 #define BOARD_RIGHT_WALL_COORD 70

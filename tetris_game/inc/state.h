@@ -160,7 +160,7 @@ void draw_active_piece(GameState_t *state);
  *
  * @param state Pointer to the game state to update.
  */
-void increase_gravity(GameState_t *state);
+BOOL_t increase_gravity(GameState_t *state);
 
 /**
  * Checks that the piece is not being moved into an existing piece.
@@ -188,7 +188,7 @@ void move_piece_left(GameState_t *state);
  *
  * @param state Pointer to the game state to update.
  */
-void move_piece_down(GameState_t *state);
+BOOL_t move_piece_down(GameState_t *state);
 
 /**
  * Rotates the active piece according to its shape-specific rotation rules.
