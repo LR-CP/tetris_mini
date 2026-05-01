@@ -58,6 +58,9 @@ void update_bitboard_bits(GameState_t *state)
     set_cursor(state->active_piece.prev_coords.p4.y + RENDER_BOARD_ORIGIN_Y, (state->active_piece.prev_coords.p4.x * 2) + RENDER_BOARD_ORIGIN_X);
     state->active_piece.prev_coords.p1.x %2 == 0 ? printf("  \n") : printf(" .\n");
 
+    if (check_collision(state) == TRUE)
+        return;
+
     // Draw new shape
     toggle_bit(state, state->active_piece.coords.p1);
     set_cursor(state->active_piece.coords.p1.y + RENDER_BOARD_ORIGIN_Y, (state->active_piece.coords.p1.x * 2) + RENDER_BOARD_ORIGIN_X);

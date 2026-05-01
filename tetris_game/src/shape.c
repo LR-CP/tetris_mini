@@ -19,6 +19,20 @@ void increase_gravity(GameState_t *state)
     update_bitboard_bits(state);
 }
 
+BOOL_t check_collision(GameState_t *state)
+{
+    printf("%d, %d, %d, %d\n", extract_bit(state, state->active_piece.coords.p1), extract_bit(state, state->active_piece.coords.p2), extract_bit(state, state->active_piece.coords.p3), extract_bit(state, state->active_piece.coords.p4));
+    if (extract_bit(state, state->active_piece.coords.p1) == TRUE ||
+        extract_bit(state, state->active_piece.coords.p2) == TRUE ||
+        extract_bit(state, state->active_piece.coords.p3) == TRUE ||
+        extract_bit(state, state->active_piece.coords.p4) == TRUE)
+    {
+        printf("COLLISION\n");
+        return TRUE;
+    }
+    return FALSE;
+}
+
 void move_piece_right(GameState_t *state)
 {
     state->active_piece.prev_coords = state->active_piece.coords;

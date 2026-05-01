@@ -148,6 +148,13 @@ BOOL_t extract_bit(GameState_t *state, coord_t bit_coord);
 void increase_gravity(GameState_t *state);
 
 /**
+ * Checks that the piece is not being moved into an existing piece.
+ *
+ * @param state Pointer to the game state to check collisions.
+ */
+BOOL_t check_collision(GameState_t *state);
+
+/**
  * Moves the active piece one column to the right when possible.
  *
  * @param state Pointer to the game state to update.
