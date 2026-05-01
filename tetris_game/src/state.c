@@ -92,3 +92,35 @@ void update_bitboard_bits(GameState_t *state)
     clear_active_piece(state);
     draw_active_piece(state);
 }
+
+/** TODO: Will check if a string in the bitboard is fully 1's
+ * then it counts as completed line and needs to be removed.
+ * By removed I mean set back to 0's and then moved to the top
+ * of the array of bit strings (bitboard)
+ * 
+ * Should be checked every cycle of game
+ */
+BOOL_t is_line_completed()
+{
+
+}
+
+void update_lines()
+{
+    // Calls is_line_completed
+}
+
+void update_level()
+{
+
+}
+
+void update_score()
+{
+
+}
+
+void update_time()
+{
+
+}

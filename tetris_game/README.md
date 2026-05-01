@@ -77,10 +77,10 @@ The playable board will be 10 pieces wide by 20 pieces tall and will look like t
 
 The stats being tracked during the game are as follows:
 - `FULL LINES`: Total count of the horizontal rows you have completed.
-- `LEVEL`: The current game speed (typically increases every 10 levels cleared). Increases gravity and points per line cleared.
+- `LEVEL`: Advances every 10 lines cleared and increases the speed of gravity.
 - `SCORE`: Each piece starts with 19 potential points and decreases by 1 as it moves down.
 - `TIME`: Duration of current play session.
-- `BEST LINES`: Highest number of lines cleared in a single session played on the machine.
+- `BEST LINES`: Highest number of lines cleared in a single session played on the machine (can maybe write this to SRAM address so it resets on turning off the device).
 
 The UI will look like the original Tetris by Alexey Pajitnov on the Electronika 60:
 ![tetris](https://media.cnn.com/api/v1/images/stellar/prod/191028124455-tetris-e60.jpg?q=w_1160,c_fill/f_webp)  
