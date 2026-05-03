@@ -1,3 +1,2 @@
-# Exclude the binary
-tetris_game/debug/
-tetris_game/docs/html
+build/
+games_library/tetris_mini/docs/html/
